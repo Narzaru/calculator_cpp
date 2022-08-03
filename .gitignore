@@ -52,7 +52,7 @@ Mkfile.old
 dkms.conf
 
 # users
-.vscode
+**/.vscode
 .todo
 compile_commands.json
 tests
