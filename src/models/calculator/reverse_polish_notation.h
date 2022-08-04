@@ -6,6 +6,7 @@
 #include "token.h"
 #include "lexeme_analyzer.h"
 #include "token_compiler.h"
+#include "token_analyzer.h"
 
 namespace s21 {
 namespace math {
@@ -16,13 +17,13 @@ class IReversePolishNotation {
   virtual ~IReversePolishNotation() = default;
 };
 
-class ReversePolishNotation final : public IReversePolishNotation {
+class ReversePolishNotation : public IReversePolishNotation, public TokenAnalyzer {
  public:
-  ReversePolishNotation(const ILexemeAnalyzer &analyzer);
+  ReversePolishNotation(const ITokenAnalyzer &analyzer);
   std::list<Token> create(std::list<Token> tokens) override;
 
  private:
-  const ILexemeAnalyzer &analyzer_;
+  const ITokenAnalyzer &analyzer_;
 };
 
 }  // namespace math

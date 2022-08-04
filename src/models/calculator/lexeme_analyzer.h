@@ -17,7 +17,6 @@ class ILexemeAnalyzer {
   virtual bool is_operator(const std::string &lexeme) const = 0;
   virtual bool is_close_bracket(const std::string &lexeme) const = 0;
   virtual bool is_variable(const std::string &lexeme) const = 0;
-  virtual bool is_right_associative(const std::string &lexeme) const = 0;
 
   virtual ~ILexemeAnalyzer() = default;
 };
@@ -33,7 +32,6 @@ class LexemeAnalyzer final : public ILexemeAnalyzer {
   bool is_operator(const std::string &lexeme) const override;
   bool is_close_bracket(const std::string &lexeme) const override;
   bool is_variable(const std::string &lexeme) const override;
-  bool is_right_associative(const std::string &lexeme) const override;
 
  private:
   std::vector<std::string> functions = {"cos",  "sin",  "tan", "acos", "asin",

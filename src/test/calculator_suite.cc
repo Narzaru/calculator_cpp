@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <ios>
 #include <list>
+#include <ostream>
 
 #include "../models/calculator/infix_math_compiler.h"
 
@@ -42,25 +43,50 @@ class TokenNameToString {
 
 TEST(suite, test_1) {
   s21::math::LexicalAnalyzer lexical_analyzer;
-  s21::math::LexemeAnalyzer token_analyzer;
-  s21::math::TokenCompiler token_compiler(token_analyzer);
+  s21::math::LexemeAnalyzer lexeme_analyzer;
+  s21::math::TokenCompiler token_compiler(lexeme_analyzer);
+  s21::math::TokenAnalyzer token_analyzer;
   s21::math::ReversePolishNotation rpn(token_analyzer);
 
-  std::list<std::string> list_of_lexemes = lexical_analyzer.ParseString("--tan(3)--tan()");
-  std::list<s21::math::Token> infix_list_of_tokens = token_compiler.compile(list_of_lexemes);
-  std::list<s21::math::Token> postfix_list_of_tokens = rpn.create(infix_list_of_tokens);
-
+  std::list<std::string> list_of_lexemes =
+      lexical_analyzer.ParseString("cos(sin(x))*(-tan(x))+4*3");
+  std::list<s21::math::Token> infix_list_of_tokens =
+      token_compiler.compile(list_of_lexemes);
+  std::list<s21::math::Token> postfix_list_of_tokens =
+      rpn.create(infix_list_of_tokens);
 
   TokenNameToString foo;
   std::size_t max_length = 0;
-  for (const s21::math::Token& item : infix_list_of_tokens) {
+  for (const s21::math::Token &item : infix_list_of_tokens) {
     if (item.getLexeme().length() > max_length) {
       max_length = item.getLexeme().length();
     }
   }
+
+  std::cout << "direct notation" << std::endl;
   for (auto &item : infix_list_of_tokens) {
     std::cout << std::setw(max_length + 1) << item.getLexeme();
     std::cout << " | ";
     std::cout << foo.print_name(item.getName()) << std::endl;
+  }
+
+  std::cout << "inderrect notation" << std::endl;
+  auto lmda = [&token_analyzer](std::ostream &os, s21::math::Token &token){
+    if (token_analyzer.priority(token) == 0) {
+      os << "none";
+    } else {
+      os << token_analyzer.priority(token);
+    }
+    os << " |";
+  };
+  for (auto &item : postfix_list_of_tokens) {
+    std::cout << "| ";
+    std::cout << std::setw(max_length + 1) << item.getLexeme();
+    std::cout << " | ";
+    std::cout << std::setw(8) << foo.print_name(item.getName());
+    std::cout << " | ";
+    std::cout << std::setw(4);
+    lmda(std::cout, item);
+    std::cout << std::endl;
   }
 }

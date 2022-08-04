@@ -32,7 +32,9 @@ class Token {
   Token &operator=(const Token &other) = default;
   Token &operator=(Token &&other) = default;
 
-  bool operator==(const Token &other);
+  bool operator==(const Token &other) const;
+  bool operator==(const TokenName &name) const;
+  bool operator!=(const TokenName &name) const;
 
   [[nodiscard]] TokenName getName() const { return name_; }
   [[nodiscard]] const std::string &getLexeme() const { return lexeme_; }

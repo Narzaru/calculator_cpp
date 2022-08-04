@@ -105,12 +105,5 @@ bool LexemeAnalyzer::is_variable(const std::string &lexeme) const {
   return false;
 }
 
-bool LexemeAnalyzer::is_right_associative(const std::string &lexeme) const {
-  if (lexeme == "pow" || lexeme == "^") {
-    return true;
-  }
-  return false;
-}
-
 }  // namespace math
 }  // namespace s21
