@@ -53,6 +53,7 @@ dkms.conf
 
 # users
 **/.vscode
+**/.cache
 .todo
 compile_commands.json
 tests
