@@ -63,6 +63,11 @@ $(TEST_BUILD_DIR)/%.o: $(TEST_DIR)/%.cc
 tests: $(TEST_OBJS) $(CALC_BUILD_DIR)/calc-all.a
 	$(CXX) $(CXXFLAGS) -Itest/ -Imodels/calculator/ $^ -lgtest -o tests
 
-models/calculator/calculator.cc:
+linter:
+	@cp ../materials/linters/CPPLINT.cfg .
+	@find . -name "*.cc" -exec python3 ../materials/linters/cpplint.py {} \;
+	@find . -name "*.h" -exec python3 ../materials/linters/cpplint.py {} \;
+	@rm -f CPPLINT.cfg
 
-.PHONY: all install uninstall clean dvi dist
+
+.PHONY: all install uninstall clean dvi dist linter

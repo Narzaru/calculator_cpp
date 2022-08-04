@@ -7,8 +7,9 @@
 #include "token_compiler.h"
 
 namespace s21 {
+namespace math {
 
-std::list<std::string> LexicalMathAnalyzer::ParseString(string expression) {
+std::list<std::string> LexicalAnalyzer::ParseString(string expression) {
   list<string> Tokens;
   ClearSpaces(&expression);
 
@@ -26,13 +27,13 @@ std::list<std::string> LexicalMathAnalyzer::ParseString(string expression) {
   return Tokens;
 }
 
-void LexicalMathAnalyzer::ClearSpaces(string *expr_str) {
+void LexicalAnalyzer::ClearSpaces(string *expr_str) {
   auto string_begin = std::remove(expr_str->begin(), expr_str->end(), ' ');
   auto string_end = expr_str->end();
   expr_str->erase(string_begin, string_end);
 }
 
-bool LexicalMathAnalyzer::IsDelimiter(const string &expr_str,
+bool LexicalAnalyzer::IsDelimiter(const string &expr_str,
                                       size_type position) {
   for (const auto &delim : delimiters) {
     if (expr_str.length() - position >= delim.length()) {
@@ -44,7 +45,7 @@ bool LexicalMathAnalyzer::IsDelimiter(const string &expr_str,
   return false;
 }
 
-std::size_t LexicalMathAnalyzer::GetDelimiterLength(const string &string,
+std::size_t LexicalAnalyzer::GetDelimiterLength(const string &string,
                                                   size_type position) {
   std::basic_string<char> previous_character;
   for (const auto &delim : delimiters) {
@@ -57,7 +58,7 @@ std::size_t LexicalMathAnalyzer::GetDelimiterLength(const string &string,
   return 0;
 }
 
-std::size_t LexicalMathAnalyzer::GetSequenceLength(const string &string,
+std::size_t LexicalAnalyzer::GetSequenceLength(const string &string,
                                                  size_type position) {
   size_type length = 0;
   char previous_character = string[position];
@@ -71,4 +72,5 @@ std::size_t LexicalMathAnalyzer::GetSequenceLength(const string &string,
   return length;
 }
 
+}  // namespace math
 }  // namespace s21

@@ -10,13 +10,14 @@
 #include "token_compiler.h"
 
 namespace s21 {
-// The class must split the string into mathematical lexemes
-class ILexicalMathAnalyzer {
+namespace math {
+
+class ILexicalAnalyzer {
  public:
   virtual std::list<std::string> ParseString(std::string expression) = 0;
 };
 
-class LexicalMathAnalyzer : public ILexicalMathAnalyzer {
+class LexicalAnalyzer : public ILexicalAnalyzer {
   using string = std::string;
   template <typename T>
   using list = std::list<T>;
@@ -26,7 +27,7 @@ class LexicalMathAnalyzer : public ILexicalMathAnalyzer {
 
  public:
   // Parse a string expression into list of lexemes
-  list<string> ParseString(std::string expression) override;
+  [[nodiscard]] list<string> ParseString(std::string expression) override;
 
  private:
   // A delimiter is a math operations and brackets
@@ -38,5 +39,7 @@ class LexicalMathAnalyzer : public ILexicalMathAnalyzer {
   size_type GetDelimiterLength(const string &string, size_type position);
   size_type GetSequenceLength(const string &string, size_type position);
 };
+
+}  // namespace math
 }  // namespace s21
 #endif  // SRC_MODELS_CALCULATOR_LEXICAL_ANALYZER_H_

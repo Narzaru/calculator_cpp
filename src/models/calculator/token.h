@@ -2,7 +2,11 @@
 #define SRC_MODELS_CALCULATOR_TOKEN_H_
 
 #include <cstdlib>
+#include <iostream>
 #include <string>
+
+namespace s21 {
+namespace math {
 
 enum class TokenName {
   kNumber,
@@ -30,12 +34,16 @@ class Token {
 
   bool operator==(const Token &other);
 
-  TokenName GetName() { return name_; }
-  const std::string &GetLexeme() { return lexeme_; }
+  [[nodiscard]] TokenName getName() const { return name_; }
+  [[nodiscard]] const std::string &getLexeme() const { return lexeme_; }
+  Token &rename(TokenName name);
 
  private:
   TokenName name_;
   std::string lexeme_;
 };
+
+}  // namespace math
+}  // namespace s21
 
 #endif  // SRC_MODELS_CALCULATOR_TOKEN_H_

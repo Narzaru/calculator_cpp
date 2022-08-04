@@ -1,55 +1,66 @@
 #include <gtest/gtest.h>
 
+#include <cstddef>
 #include <iomanip>
 #include <ios>
 #include <list>
 
-#include "../models/calculator/calculator.h"
-#include "../models/calculator/lexical_analyzer.h"
+#include "../models/calculator/infix_math_compiler.h"
 
-class foo {
+class TokenNameToString {
  public:
-  const std::string &print_name(TokenName n) {
+  const std::string &print_name(s21::math::TokenName n) {
     switch (n) {
-      case TokenName::kCloseBracket:
+      case s21::math::TokenName::kCloseBracket:
         return names[0];
-      case TokenName::kNumber:
+      case s21::math::TokenName::kNumber:
         return names[1];
-      case TokenName::kOpenBracket:
+      case s21::math::TokenName::kOpenBracket:
         return names[2];
-      case TokenName::kFunction:
+      case s21::math::TokenName::kFunction:
         return names[3];
-      case TokenName::kOperator:
+      case s21::math::TokenName::kOperator:
         return names[4];
-      case TokenName::kVariable:
+      case s21::math::TokenName::kVariable:
         return names[5];
-      case TokenName::kWrong:
+      case s21::math::TokenName::kWrong:
         return names[6];
-      case TokenName::kUnary:
+      case s21::math::TokenName::kUnary:
         return names[7];
-      case TokenName::kEmpty:
+      case s21::math::TokenName::kEmpty:
         return names[8];
-        break;
+      default:
+        return names[9];
     }
   }
 
  private:
-  std::vector<std::string> names = {"Close bracket", "Number",   "Open bracket",
-                                    "Function",      "Operator", "Variable",
-                                    "Wrong",         "Unary",    "Empty"};
+  std::vector<std::string> names = {
+      "Close bracket", "Number", "Open bracket", "Function", "Operator",
+      "Variable",      "Wrong",  "Unary",        "Empty",    "error"};
 };
 
 TEST(suite, test_1) {
-  foo helper;
-  s21::TokenAnalyzer token_analyzer;
-  MathTokenCompiler token_compiler(token_analyzer);
-  s21::LexicalMathAnalyzer analyzer;
-  std::list<std::string> tokens = analyzer.ParseString("asd asd 3.4 +    4.e+0");
-  for (auto item : tokens) {
-    std::cout << item << std::endl;
-    // std::cout << std::setw(10) << std::left << item.GetLexeme();
-    // std::cout << " | ";
-    // std::cout << helper.print_name(item.GetName());
-    // std::cout << std::endl;
+  s21::math::LexicalAnalyzer lexical_analyzer;
+  s21::math::LexemeAnalyzer token_analyzer;
+  s21::math::TokenCompiler token_compiler(token_analyzer);
+  s21::math::ReversePolishNotation rpn(token_analyzer);
+
+  std::list<std::string> list_of_lexemes = lexical_analyzer.ParseString("--tan(3)--tan()");
+  std::list<s21::math::Token> infix_list_of_tokens = token_compiler.compile(list_of_lexemes);
+  std::list<s21::math::Token> postfix_list_of_tokens = rpn.create(infix_list_of_tokens);
+
+
+  TokenNameToString foo;
+  std::size_t max_length = 0;
+  for (const s21::math::Token& item : infix_list_of_tokens) {
+    if (item.getLexeme().length() > max_length) {
+      max_length = item.getLexeme().length();
+    }
+  }
+  for (auto &item : infix_list_of_tokens) {
+    std::cout << std::setw(max_length + 1) << item.getLexeme();
+    std::cout << " | ";
+    std::cout << foo.print_name(item.getName()) << std::endl;
   }
 }
