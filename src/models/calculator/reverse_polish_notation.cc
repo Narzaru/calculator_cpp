@@ -41,15 +41,17 @@ std::list<Token> ReversePolishNotation::create(std::list<Token> tokens) {
         out_tokens.push_back(std::move(stack.top()));
         stack.pop();
       }
+      stack.pop();
       if (stack.empty()) {
         error_occurred = true;
       } else {
-        stack.pop();
         if (stack.top() == TokenName::kFunction) {
           out_tokens.push_back(std::move(stack.top()));
           stack.pop();
         }
       }
+    } else {
+      error_occurred = true;
     }
   }
 
@@ -62,8 +64,9 @@ std::list<Token> ReversePolishNotation::create(std::list<Token> tokens) {
     error_occurred = true;
   }
 
-
-  // out.reverse();
+  if (error_occurred) {
+    out_tokens.clear();
+  }
 
   return out_tokens;
 }
