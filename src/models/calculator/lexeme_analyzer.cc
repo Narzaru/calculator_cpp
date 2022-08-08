@@ -15,53 +15,71 @@ bool LexemeAnalyzer::is_didgit(int code) const {
 
 // is_number implementation using a state machine idea
 bool LexemeAnalyzer::is_number(const std::string &lexeme) const {
-  int state = 1;
+  int state = 0;
   for (const char &chr : lexeme) {
     switch (state) {
-      case 1:
+      case 0:  // not a number is a error state
+        if (is_didgit(chr)) {
+          state = 1;
+        } else {
+          state = 7;
+        }
+        break;
+      case 1:  // number is end state
         if (is_didgit(chr)) {
           state = 1;
         } else if (chr == '.') {
           state = 2;
-        } else if (chr == 'e' || chr == 'E') {
+        } else if (chr == 'E' || chr == 'e') {
           state = 3;
         } else {
-          state = 5;
+          state = 7;
         }
         break;
-      case 2:
-        if (is_didgit(chr)) {
-          state = 2;
-        } else if (chr == 'e' || chr == 'E') {
-          state = 3;
-        } else {
-          state = 5;
+      case 2:  // dot is end state
+          if (is_didgit(chr)) {
+            state = 2;
+          } else if (chr == 'E' || chr == 'e') {
+            state = 3;
+          } else {
+          state = 7;
         }
         break;
-      case 3:
-        if (is_didgit(chr)) {
-          state = 3;
-        } else if (chr == '+' || chr == '-') {
-          state = 4;
-        } else {
-          state = 5;
+      case 3:  // e or E is error state
+          if (is_didgit(chr)) {
+            state = 5;
+          } else if (chr == '+' || chr == '-') {
+            state = 4;
+          } else {
+          state = 7;
         }
         break;
-      case 4:
-        if (is_didgit(chr)) {
-          state = 4;
-        } else {
-          state = 5;
+      case 4:  // e+ or E+ is error state
+          if (is_didgit(chr)) {
+            state = 6;
+          } else {
+          state = 7;
         }
         break;
-      default:state = 5;
+      case 5:  // number is end state
+          if (is_didgit(chr)) {
+            state = 5;
+          } else {
+          state = 7;
+        }
+        break;
+      case 6:  // number is end state
+          if (is_didgit(chr)) {
+            state = 6;
+          } else {
+          state = 7;
+        }
+        break;
+      case 7:
+        break;
     }
   }
-  if (state == 5) {
-    return false;
-  } else {
-    return true;
-  }
+  return !(state == 0 || state == 3 || state == 4 || state == 7);
 }
 
 bool LexemeAnalyzer::is_open_bracket(const std::string &lexeme) const {
