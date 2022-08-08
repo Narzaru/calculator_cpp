@@ -4,46 +4,10 @@
 
 namespace s21 {
 namespace math {
-bool TokenAnalyzer::is_number(const Token& token) const {
-  return token.getName() == TokenName::kNumber;
-}
-
-bool TokenAnalyzer::is_open_bracket(const Token& token) const {
-  return token.getName() == TokenName::kOpenBracket;
-}
-
-bool TokenAnalyzer::is_function(const Token& token) const {
-  return token.getName() == TokenName::kFunction;
-}
-
-bool TokenAnalyzer::is_operator(const Token& token) const {
-  return token.getName() == TokenName::kOperator ||
-         token.getName() == TokenName::kUnary;
-}
-
-bool TokenAnalyzer::is_close_bracket(const Token& token) const {
-  return token.getName() == TokenName::kCloseBracket;
-}
-
-bool TokenAnalyzer::is_variable(const Token& token) const {
-  return token.getName() == TokenName::kVariable;
-}
-
-bool TokenAnalyzer::is_wrong(const Token& token) const {
-  return token.getName() == TokenName::kWrong;
-}
-
-bool TokenAnalyzer::is_unary(const Token& token) const {
-  return token.getName() == TokenName::kUnary;
-}
-
-bool TokenAnalyzer::is_empty(const Token& token) const {
-  return token.getName() == TokenName::kEmpty;
-}
 
 int TokenAnalyzer::priority(const Token& token) const {
   int priority = 0;
-  const std::string& lexeme = token.getLexeme();
+  const std::string& lexeme = token.GetValue();
 
   if (token != TokenName::kUnary && (lexeme == "+" || lexeme == "-")) {
     priority = 1;
@@ -62,8 +26,7 @@ int TokenAnalyzer::priority(const Token& token) const {
 }
 
 bool TokenAnalyzer::is_right_associative(const Token& token) const {
-  if (token.getName() == TokenName::kUnary || token.getLexeme() == "pow" ||
-      token.getLexeme() == "^") {
+  if (token.GetName() == TokenName::kUnary || token.GetValue() == "pow" || token.GetValue() == "^") {
     return true;
   }
   return false;

@@ -33,8 +33,7 @@ void LexicalAnalyzer::ClearSpaces(string *expr_str) {
   expr_str->erase(string_begin, string_end);
 }
 
-bool LexicalAnalyzer::IsDelimiter(const string &expr_str,
-                                      size_type position) {
+bool LexicalAnalyzer::IsDelimiter(const string &expr_str, size_type position) {
   for (const auto &delim : delimiters) {
     if (expr_str.length() - position >= delim.length()) {
       if (expr_str.find(delim, position) == position) {
@@ -45,8 +44,7 @@ bool LexicalAnalyzer::IsDelimiter(const string &expr_str,
   return false;
 }
 
-std::size_t LexicalAnalyzer::GetDelimiterLength(const string &string,
-                                                  size_type position) {
+std::size_t LexicalAnalyzer::GetDelimiterLength(const string &string, size_type position) {
   std::basic_string<char> previous_character;
   for (const auto &delim : delimiters) {
     if (string.length() - position >= delim.length()) {
@@ -58,13 +56,11 @@ std::size_t LexicalAnalyzer::GetDelimiterLength(const string &string,
   return 0;
 }
 
-std::size_t LexicalAnalyzer::GetSequenceLength(const string &string,
-                                                 size_type position) {
+std::size_t LexicalAnalyzer::GetSequenceLength(const string &string, size_type position) {
   size_type length = 0;
   char previous_character = string[position];
 
-  while ((!IsDelimiter(string, position) || previous_character == 'e') &&
-         position < string.length()) {
+  while ((!IsDelimiter(string, position) || previous_character == 'e') && position < string.length()) {
     previous_character = string[position];
     ++position;
     ++length;

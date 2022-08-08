@@ -5,13 +5,11 @@
 namespace s21 {
 namespace math {
 
-Token::Token() : name_(TokenName::kEmpty), lexeme_() {}
-
 Token::Token(TokenName token_name, Token::string lexeme)
-    : name_(token_name), lexeme_(std::move(lexeme)) {}
+    : name_(token_name), value_(std::move(lexeme)) {}
 
 bool Token::operator==(const Token& other) const {
-  return other.name_ == name_ && other.lexeme_ == lexeme_;
+  return other.name_ == name_ && other.value_ == value_;
 }
 
 bool Token::operator==(const TokenName &name) const {
@@ -23,7 +21,7 @@ bool Token::operator!=(const TokenName &name) const {
 }
 
 Token& Token::rename(TokenName name) {
-  name_ = name;
+  name_ = std::move(name);
   return *this;
 }
 

@@ -14,14 +14,13 @@ namespace math {
 
 class ITokenCompiler {
  public:
-  // virtual TokenName get_token_name(const std::string &lexeme) = 0;
   virtual std::list<Token> compile(const std::list<std::string> &lexemes) = 0;
   virtual ~ITokenCompiler() = default;
 };
 
-class TokenCompiler final : public ITokenCompiler {
+class SyntacticalAnalyzer final : public ITokenCompiler {
  public:
-  TokenCompiler(const ILexemeAnalyzer &token_analyzer);
+  SyntacticalAnalyzer(const ILexemeAnalyzer &token_analyzer);
   [[nodiscard]] std::list<Token> compile(const std::list<std::string> &lexemes) override;
 
  private:

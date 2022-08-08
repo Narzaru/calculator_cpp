@@ -8,10 +8,10 @@
 
 namespace s21 {
 namespace math {
-TokenCompiler::TokenCompiler(const ILexemeAnalyzer &token_analyzer)
+SyntacticalAnalyzer::SyntacticalAnalyzer(const ILexemeAnalyzer &token_analyzer)
     : lexeme_analyzer_(token_analyzer) {}
 
-TokenName TokenCompiler::get_token_name(const std::string &lexeme) {
+TokenName SyntacticalAnalyzer::get_token_name(const std::string &lexeme) {
   if (lexeme_analyzer_.is_number(lexeme)) {
     return TokenName::kNumber;
   } else if (lexeme_analyzer_.is_open_bracket(lexeme)) {
@@ -28,7 +28,7 @@ TokenName TokenCompiler::get_token_name(const std::string &lexeme) {
   return TokenName::kWrong;
 }
 
-std::list<Token> TokenCompiler::compile(const std::list<std::string> &lexemes) {
+std::list<Token> SyntacticalAnalyzer::compile(const std::list<std::string> &lexemes) {
   std::list<Token> out_list;
 
   // parses the token into token names
@@ -41,14 +41,14 @@ std::list<Token> TokenCompiler::compile(const std::list<std::string> &lexemes) {
   for (Token &token : out_list) {
     if (prew_name == TokenName::kOperator || prew_name == TokenName::kUnary ||
         prew_name == TokenName::kOpenBracket) {
-      if (token.getLexeme() == "+" || token.getLexeme() == "-") {
-        if (token.getName() == TokenName::kOperator ||
-            token.getName() == TokenName::kOpenBracket) {
+      if (token.GetValue() == "+" || token.GetValue() == "-") {
+        if (token.GetName() == TokenName::kOperator ||
+            token.GetName() == TokenName::kOpenBracket) {
           token.rename(TokenName::kUnary);
         }
       }
     }
-    prew_name = token.getName();
+    prew_name = token.GetName();
   }
 
   return out_list;

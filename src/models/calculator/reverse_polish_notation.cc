@@ -13,9 +13,7 @@ ReversePolishNotation::ReversePolishNotation(const ITokenAnalyzer &analyzer)
     : analyzer_(analyzer) {}
 
 std::list<Token> ReversePolishNotation::create(std::list<Token> tokens) {
-  [[maybe_unused]] bool may_unary = true;
   [[maybe_unused]] bool error_occurred = false;
-  Token token;
   std::list<Token> out_tokens;
   std::stack<Token> stack;
 

@@ -24,25 +24,19 @@ class Token {
   using string = std::string;
 
  public:
-  Token();
   Token(TokenName token_name, string lexeme);
-
-  Token(const Token &other) = default;
-  Token(Token &&other) = default;
-  Token &operator=(const Token &other) = default;
-  Token &operator=(Token &&other) = default;
 
   bool operator==(const Token &other) const;
   bool operator==(const TokenName &name) const;
   bool operator!=(const TokenName &name) const;
 
-  [[nodiscard]] TokenName getName() const { return name_; }
-  [[nodiscard]] const std::string &getLexeme() const { return lexeme_; }
+  [[nodiscard]] TokenName GetName() const { return name_; }
+  [[nodiscard]] const std::string &GetValue() const { return value_; }
   Token &rename(TokenName name);
 
  private:
   TokenName name_;
-  std::string lexeme_;
+  std::string value_;
 };
 
 }  // namespace math

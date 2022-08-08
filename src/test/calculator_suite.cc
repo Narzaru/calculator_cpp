@@ -44,30 +44,27 @@ class TokenNameToString {
 TEST(suite, test_1) {
   s21::math::LexicalAnalyzer lexical_analyzer;
   s21::math::LexemeAnalyzer lexeme_analyzer;
-  s21::math::TokenCompiler token_compiler(lexeme_analyzer);
+  s21::math::SyntacticalAnalyzer token_compiler(lexeme_analyzer);
   s21::math::TokenAnalyzer token_analyzer;
   s21::math::ReversePolishNotation rpn(token_analyzer);
 
-  std::list<std::string> list_of_lexemes =
-      lexical_analyzer.ParseString("cos(sin(x))*(-tan(x))+4*3");
-  std::list<s21::math::Token> infix_list_of_tokens =
-      token_compiler.compile(list_of_lexemes);
-  std::list<s21::math::Token> postfix_list_of_tokens =
-      rpn.create(infix_list_of_tokens);
+  std::list<std::string> list_of_lexemes = lexical_analyzer.ParseString("41.ecos(33)");
+  std::list<s21::math::Token> infix_list_of_tokens = token_compiler.compile(list_of_lexemes);
+  std::list<s21::math::Token> postfix_list_of_tokens = rpn.create(infix_list_of_tokens);
 
   TokenNameToString foo;
   std::size_t max_length = 0;
   for (const s21::math::Token &item : infix_list_of_tokens) {
-    if (item.getLexeme().length() > max_length) {
-      max_length = item.getLexeme().length();
+    if (item.GetValue().length() > max_length) {
+      max_length = item.GetValue().length();
     }
   }
 
   std::cout << "direct notation" << std::endl;
   for (auto &item : infix_list_of_tokens) {
-    std::cout << std::setw(max_length + 1) << item.getLexeme();
+    std::cout << std::setw(max_length + 1) << item.GetValue();
     std::cout << " | ";
-    std::cout << foo.print_name(item.getName()) << std::endl;
+    std::cout << foo.print_name(item.GetName()) << std::endl;
   }
 
   std::cout << "inderrect notation" << std::endl;
@@ -81,9 +78,9 @@ TEST(suite, test_1) {
   };
   for (auto &item : postfix_list_of_tokens) {
     std::cout << "| ";
-    std::cout << std::setw(max_length + 1) << item.getLexeme();
+    std::cout << std::setw(max_length + 1) << item.GetValue();
     std::cout << " | ";
-    std::cout << std::setw(8) << foo.print_name(item.getName());
+    std::cout << std::setw(8) << foo.print_name(item.GetName());
     std::cout << " | ";
     std::cout << std::setw(4);
     lmda(std::cout, item);
