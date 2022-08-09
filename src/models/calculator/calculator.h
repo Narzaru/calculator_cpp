@@ -5,31 +5,36 @@
 #include <string>
 
 #include "lexical_analyzer.h"
+#include "reverse_polish_notation_calc.h"
 #include "reverse_polish_notation_former.h"
-#include "token.h"
 #include "syntactical_analyzer.h"
+#include "token.h"
 
 namespace s21 {
-namespace math {
 
 class Calculator {
  public:
+  Calculator();
+  ~Calculator();
   Calculator &push_expression(std::string expression) noexcept;
   Calculator &compile_expression();
   [[nodiscard]] double calculate();
-  [[nodiscard]] double calculate(const double &x);
+  [[nodiscard]] double calculate(const double *x);
   [[nodiscard]] bool is_success() const;
 
- private:
-  ILexicalAnalyzer *analyzer;
+  [[nodiscard]] double calculate(const std::string &exression);
+  [[nodiscard]] double calculate(const std::string &exression, const double *x);
 
-  IReversePolishNotationFormer *rpn_former_;
+ private:
+  math::ILexicalAnalyzer *lexical_analyzer;
+  math::ISyntacticalAnalyzer *syntactical_analyzer;
+  math::IReversePolishNotationFormer *rpn_former;
+  math::IReversePolishNotationCalculator *rpn_calculator;
   std::string expression_;
-  std::list<Token> rpn_tokens_;
+  std::list<math::Token> rpn_tokens_;
   bool is_have_any_error_;
 };
 
-}  // namespace math
 }  // namespace s21
 
 #endif  // SRC_MODELS_CALCULATOR_CALCULATOR_H_
