@@ -43,47 +43,42 @@ class TokenNameToString {
 
 TEST(suite, test_1) {
   s21::math::LexicalAnalyzer lexical_analyzer;
-  s21::math::LexemeAnalyzer lexeme_analyzer;
-  s21::math::SyntacticalAnalyzer token_compiler(lexeme_analyzer);
-  s21::math::TokenAnalyzer token_analyzer;
-  s21::math::ReversePolishNotation rpn(token_analyzer);
+  s21::math::SyntacticalAnalyzer syntatic_analyzer;
+  s21::math::ReversePolishNotationFormer rpn;
+  s21::math::ReversePolishNotationCalculator rpnc;
 
-  std::list<std::string> list_of_lexemes = lexical_analyzer.ParseString("41.ecos(33)");
-  std::list<s21::math::Token> infix_list_of_tokens = token_compiler.compile(list_of_lexemes);
-  std::list<s21::math::Token> postfix_list_of_tokens = rpn.create(infix_list_of_tokens);
-
-  TokenNameToString foo;
-  std::size_t max_length = 0;
-  for (const s21::math::Token &item : infix_list_of_tokens) {
-    if (item.GetValue().length() > max_length) {
-      max_length = item.GetValue().length();
-    }
+  std::list<std::string> list_of_lexemes;
+  try {
+    list_of_lexemes = lexical_analyzer.ParseString("2 ^ 2 ^ 3 + 1");
+  } catch (const std::string &message) {
+    std::cout << "0 " + message;
   }
 
-  std::cout << "direct notation" << std::endl;
-  for (auto &item : infix_list_of_tokens) {
-    std::cout << std::setw(max_length + 1) << item.GetValue();
-    std::cout << " | ";
-    std::cout << foo.print_name(item.GetName()) << std::endl;
+  std::list<s21::math::Token> infix_list_of_tokens;
+  try {
+    infix_list_of_tokens = syntatic_analyzer.compile(list_of_lexemes);
+  } catch (const std::string &message) {
+    std::cout << "1 " + message;
+  }
+  std::list<s21::math::Token> postfix_list_of_tokens;
+  try {
+    postfix_list_of_tokens = rpn.create(infix_list_of_tokens);
+  } catch (const std::string &message) {
+    std::cout << "2 " + message;
   }
 
-  std::cout << "inderrect notation" << std::endl;
-  auto lmda = [&token_analyzer](std::ostream &os, s21::math::Token &token){
-    if (token_analyzer.priority(token) == 0) {
-      os << "none";
-    } else {
-      os << token_analyzer.priority(token);
-    }
-    os << " |";
-  };
-  for (auto &item : postfix_list_of_tokens) {
-    std::cout << "| ";
-    std::cout << std::setw(max_length + 1) << item.GetValue();
-    std::cout << " | ";
-    std::cout << std::setw(8) << foo.print_name(item.GetName());
-    std::cout << " | ";
-    std::cout << std::setw(4);
-    lmda(std::cout, item);
-    std::cout << std::endl;
-  }
+  double res = rpnc.calculate(postfix_list_of_tokens, nullptr);
+  std::cout << std::endl << res << std::endl;
+}
+
+TEST(suite, test_2) {
+  s21::Calculator calc;
+  calc.push_expression("2 ^ 2 ^ 3 + 1");
+  calc.compile_expression();
+  std::cout << calc.calculate() << std::endl;
+}
+
+TEST(suite, test_3) {
+  s21::Calculator calc;
+  std::cout << calc.calculate("2 ^ 2 ^ 3 + 1") << std::endl;
 }
