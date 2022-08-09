@@ -15,6 +15,7 @@ namespace math {
 class ILexicalAnalyzer {
  public:
   virtual std::list<std::string> ParseString(std::string expression) = 0;
+  virtual ~ILexicalAnalyzer() = default;
 };
 
 class LexicalAnalyzer : public ILexicalAnalyzer {
