@@ -19,11 +19,7 @@ class IReversePolishNotationFormer {
 
 class ReversePolishNotationFormer final : public IReversePolishNotationFormer, public OperatorAnalyzer {
  public:
-  ReversePolishNotationFormer(const IOperatorAnalyzer &analyzer);
   std::list<Token> create(std::list<Token> tokens) override;
-
- private:
-  const IOperatorAnalyzer &analyzer_;
 };
 
 }  // namespace math

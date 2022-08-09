@@ -5,13 +5,9 @@
 #include <stack>
 
 #include "token.h"
-#include "operator_analyzer.h"
 
 namespace s21 {
 namespace math {
-ReversePolishNotationFormer::ReversePolishNotationFormer(const IOperatorAnalyzer &analyzer)
-    : analyzer_(analyzer) {}
-
 std::list<Token> ReversePolishNotationFormer::create(std::list<Token> tokens) {
   [[maybe_unused]] bool error_occurred = false;
   std::list<Token> out_tokens;
