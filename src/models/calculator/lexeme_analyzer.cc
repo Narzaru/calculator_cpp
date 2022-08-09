@@ -1,11 +1,11 @@
-#include <algorithm>
-
 #include "lexeme_analyzer.h"
+
+#include <algorithm>
 
 namespace s21 {
 namespace math {
 
-bool LexemeAnalyzer::is_didgit(int code) const {
+bool LexemeAnalyzer::IsDidgit(int code) const {
   if (code >= '0' && code <= '9') {
     return true;
   } else {
@@ -13,76 +13,67 @@ bool LexemeAnalyzer::is_didgit(int code) const {
   }
 }
 
-// is_number implementation using a state machine idea
-bool LexemeAnalyzer::is_number(const std::string &lexeme) const {
+// IsNumber implementation using a state machine idea
+bool LexemeAnalyzer::IsNumber(const std::string &lexeme) const {
   int state = 0;
   for (const char &chr : lexeme) {
     switch (state) {
-      case 0:  // not a number is a error state
-        if (is_didgit(chr)) {
+      case 0:
+        if (IsDidgit(chr)) {
           state = 1;
         } else {
-          state = 7;
+          state = 6;
         }
         break;
-      case 1:  // number is end state
-        if (is_didgit(chr)) {
+      case 1:
+        if (IsDidgit(chr)) {
           state = 1;
         } else if (chr == '.') {
           state = 2;
-        } else if (chr == 'E' || chr == 'e') {
+        } else if (chr == 'e' || chr == 'E') {
           state = 3;
         } else {
-          state = 7;
+          state = 6;
         }
         break;
-      case 2:  // dot is end state
-          if (is_didgit(chr)) {
-            state = 2;
-          } else if (chr == 'E' || chr == 'e') {
-            state = 3;
-          } else {
-          state = 7;
+      case 2:
+        if (IsDidgit(chr)) {
+          state = 2;
+        } else if (chr == 'e' || chr == 'E') {
+          state = 3;
         }
         break;
-      case 3:  // e or E is error state
-          if (is_didgit(chr)) {
-            state = 5;
-          } else if (chr == '+' || chr == '-') {
-            state = 4;
-          } else {
-          state = 7;
+      case 3:
+        if (IsDidgit(chr)) {
+          state = 5;
+        } else if (chr == '+' || chr == '-') {
+          state = 4;
+        } else {
+          state = 6;
         }
         break;
-      case 4:  // e+ or E+ is error state
-          if (is_didgit(chr)) {
-            state = 6;
-          } else {
-          state = 7;
+      case 4:
+        if (IsDidgit(chr)) {
+          state = 5;
+        } else {
+          state = 6;
         }
         break;
-      case 5:  // number is end state
-          if (is_didgit(chr)) {
-            state = 5;
-          } else {
-          state = 7;
+      case 5:
+        if (IsDidgit(chr)) {
+          state = 5;
+        } else {
+          state = 6;
         }
         break;
-      case 6:  // number is end state
-          if (is_didgit(chr)) {
-            state = 6;
-          } else {
-          state = 7;
-        }
-        break;
-      case 7:
+      case 6:  // error state
         break;
     }
   }
-  return !(state == 0 || state == 3 || state == 4 || state == 7);
+  return state == 1 || state == 2 || state == 5;
 }
 
-bool LexemeAnalyzer::is_open_bracket(const std::string &lexeme) const {
+bool LexemeAnalyzer::IsOpenBracket(const std::string &lexeme) const {
   if (lexeme.length() == 1 && lexeme[0] == '(') {
     return true;
   } else {
@@ -90,7 +81,7 @@ bool LexemeAnalyzer::is_open_bracket(const std::string &lexeme) const {
   }
 }
 
-bool LexemeAnalyzer::is_function(const std::string &lexeme) const {
+bool LexemeAnalyzer::IsFunction(const std::string &lexeme) const {
   for (const std::string &item : functions) {
     if (lexeme == item) {
       return true;
@@ -99,8 +90,8 @@ bool LexemeAnalyzer::is_function(const std::string &lexeme) const {
   return false;
 }
 
-bool LexemeAnalyzer::is_operator(const std::string &lexeme) const {
-  for (const std::string &item : operations) {
+bool LexemeAnalyzer::IsOperator(const std::string &lexeme) const {
+  for (const std::string &item : operators) {
     if (lexeme == item) {
       return true;
     }
@@ -108,7 +99,7 @@ bool LexemeAnalyzer::is_operator(const std::string &lexeme) const {
   return false;
 }
 
-bool LexemeAnalyzer::is_close_bracket(const std::string &lexeme) const {
+bool LexemeAnalyzer::IsCloseBracket(const std::string &lexeme) const {
   if (lexeme.length() == 1 && lexeme[0] == ')') {
     return true;
   } else {
@@ -116,7 +107,7 @@ bool LexemeAnalyzer::is_close_bracket(const std::string &lexeme) const {
   }
 }
 
-bool LexemeAnalyzer::is_variable(const std::string &lexeme) const {
+bool LexemeAnalyzer::IsVariable(const std::string &lexeme) const {
   if (lexeme.length() == 1 && lexeme[0] == 'x') {
     return true;
   }

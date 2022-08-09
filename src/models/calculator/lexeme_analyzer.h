@@ -10,33 +10,32 @@ namespace math {
 
 class ILexemeAnalyzer {
  public:
-  virtual bool is_didgit(int code) const = 0;
-  virtual bool is_number(const std::string &lexeme) const = 0;
-  virtual bool is_open_bracket(const std::string &lexeme) const = 0;
-  virtual bool is_function(const std::string &lexeme) const = 0;
-  virtual bool is_operator(const std::string &lexeme) const = 0;
-  virtual bool is_close_bracket(const std::string &lexeme) const = 0;
-  virtual bool is_variable(const std::string &lexeme) const = 0;
+  virtual bool IsNumber(const std::string &lexeme) const = 0;
+  virtual bool IsOpenBracket(const std::string &lexeme) const = 0;
+  virtual bool IsFunction(const std::string &lexeme) const = 0;
+  virtual bool IsOperator(const std::string &lexeme) const = 0;
+  virtual bool IsCloseBracket(const std::string &lexeme) const = 0;
+  virtual bool IsVariable(const std::string &lexeme) const = 0;
 
   virtual ~ILexemeAnalyzer() = default;
 };
 
-class LexemeAnalyzer final : public ILexemeAnalyzer {
+class LexemeAnalyzer : public ILexemeAnalyzer {
  public:
   LexemeAnalyzer() {}
 
-  bool is_didgit(int code) const override;
-  bool is_number(const std::string &lexeme) const override;
-  bool is_open_bracket(const std::string &lexeme) const override;
-  bool is_function(const std::string &lexeme) const override;
-  bool is_operator(const std::string &lexeme) const override;
-  bool is_close_bracket(const std::string &lexeme) const override;
-  bool is_variable(const std::string &lexeme) const override;
+  bool IsNumber(const std::string &lexeme) const override;
+  bool IsOpenBracket(const std::string &lexeme) const override;
+  bool IsFunction(const std::string &lexeme) const override;
+  bool IsOperator(const std::string &lexeme) const override;
+  bool IsCloseBracket(const std::string &lexeme) const override;
+  bool IsVariable(const std::string &lexeme) const override;
 
  private:
+  bool IsDidgit(int code) const;
   std::vector<std::string> functions = {"cos",  "sin",  "tan", "acos", "asin",
                                         "atan", "sqrt", "ln",  "log"};
-  std::vector<std::string> operations = {"+", "-", "*", "/", "^", "mod", "%"};
+  std::vector<std::string> operators = {"+", "-", "*", "/", "^", "mod", "%"};
 };
 
 }  // namespace math
