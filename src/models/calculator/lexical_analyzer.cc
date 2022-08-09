@@ -4,7 +4,7 @@
 #include <cstddef>
 
 #include "token.h"
-#include "token_compiler.h"
+#include "syntactical_analyzer.h"
 
 namespace s21 {
 namespace math {
