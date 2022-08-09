@@ -1,18 +1,18 @@
-#include "reverse_polish_notation.h"
+#include "reverse_polish_notation_former.h"
 
 #include <list>
 #include <queue>
 #include <stack>
 
 #include "token.h"
-#include "token_analyzer.h"
+#include "operator_analyzer.h"
 
 namespace s21 {
 namespace math {
-ReversePolishNotation::ReversePolishNotation(const ITokenAnalyzer &analyzer)
+ReversePolishNotationFormer::ReversePolishNotationFormer(const IOperatorAnalyzer &analyzer)
     : analyzer_(analyzer) {}
 
-std::list<Token> ReversePolishNotation::create(std::list<Token> tokens) {
+std::list<Token> ReversePolishNotationFormer::create(std::list<Token> tokens) {
   [[maybe_unused]] bool error_occurred = false;
   std::list<Token> out_tokens;
   std::stack<Token> stack;
@@ -53,7 +53,7 @@ std::list<Token> ReversePolishNotation::create(std::list<Token> tokens) {
     }
   }
 
-  while (!stack.empty() && stack.top() == TokenName::kOperator) {
+  while (!stack.empty() && (stack.top() == TokenName::kOperator || stack.top() == TokenName::kUnary)) {
     out_tokens.push_back(std::move(stack.top()));
     stack.pop();
   }

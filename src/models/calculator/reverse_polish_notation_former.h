@@ -5,25 +5,25 @@
 
 #include "token.h"
 #include "lexeme_analyzer.h"
-#include "token_compiler.h"
-#include "token_analyzer.h"
+#include "syntactical_analyzer.h"
+#include "operator_analyzer.h"
 
 namespace s21 {
 namespace math {
 
-class IReversePolishNotation {
+class IReversePolishNotationFormer {
  public:
   virtual std::list<Token> create(std::list<Token> tokens) = 0;
-  virtual ~IReversePolishNotation() = default;
+  virtual ~IReversePolishNotationFormer() = default;
 };
 
-class ReversePolishNotation : public IReversePolishNotation, public TokenAnalyzer {
+class ReversePolishNotationFormer final : public IReversePolishNotationFormer, public OperatorAnalyzer {
  public:
-  ReversePolishNotation(const ITokenAnalyzer &analyzer);
+  ReversePolishNotationFormer(const IOperatorAnalyzer &analyzer);
   std::list<Token> create(std::list<Token> tokens) override;
 
  private:
-  const ITokenAnalyzer &analyzer_;
+  const IOperatorAnalyzer &analyzer_;
 };
 
 }  // namespace math
