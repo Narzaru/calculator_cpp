@@ -2,8 +2,7 @@
 
 #include <utility>
 
-namespace s21 {
-namespace math {
+namespace s21::math {
 
 Token::Token(TokenName token_name, Token::string lexeme)
     : name_(token_name), value_(std::move(lexeme)) {}
@@ -21,9 +20,8 @@ bool Token::operator!=(const TokenName &name) const {
 }
 
 Token& Token::rename(TokenName name) {
-  name_ = std::move(name);
+  name_ = name;
   return *this;
 }
 
-}  // namespace math
 }  // namespace s21

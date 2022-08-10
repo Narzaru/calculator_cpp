@@ -5,8 +5,7 @@
 #include <iostream>
 #include <string>
 
-namespace s21 {
-namespace math {
+namespace s21::math {
 
 enum class TokenName {
   kNumber,
@@ -39,7 +38,6 @@ class Token {
   std::string value_;
 };
 
-}  // namespace math
 }  // namespace s21
 
 #endif  // SRC_MODELS_CALCULATOR_TOKEN_H_

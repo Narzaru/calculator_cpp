@@ -6,8 +6,7 @@
 #include "token.h"
 #include "syntactical_analyzer.h"
 
-namespace s21 {
-namespace math {
+namespace s21::math {
 
 std::list<std::string> LexicalAnalyzer::ParseString(string expression) {
   list<string> Tokens;
@@ -68,5 +67,4 @@ std::size_t LexicalAnalyzer::GetSequenceLength(const string &string, size_type p
   return length;
 }
 
-}  // namespace math
 }  // namespace s21

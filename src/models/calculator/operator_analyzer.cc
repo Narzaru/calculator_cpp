@@ -2,8 +2,7 @@
 
 #include "token.h"
 
-namespace s21 {
-namespace math {
+namespace s21::math {
 
 int OperatorAnalyzer::priority(const Token& token) const {
   int priority = 0;
@@ -36,5 +35,4 @@ bool OperatorAnalyzer::is_left_associative(const Token& token) const {
   return !is_right_associative(token);
 }
 
-}  // namespace math
 }  // namespace s21

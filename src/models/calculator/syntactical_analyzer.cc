@@ -6,8 +6,7 @@
 
 #include "token.h"
 
-namespace s21 {
-namespace math {
+namespace s21::math {
 
 TokenName SyntacticalAnalyzer::GetTokenName(const std::string &lexeme) {
   if (IsNumber(lexeme)) {
@@ -23,10 +22,11 @@ TokenName SyntacticalAnalyzer::GetTokenName(const std::string &lexeme) {
   } else if (IsVariable(lexeme)) {
     return TokenName::kVariable;
   }
-  throw std::string("wrong lexeme \"") + lexeme + "\" in input\n";
+  return TokenName::kWrong;
 }
 
-std::list<Token> SyntacticalAnalyzer::compile(const std::list<std::string> &lexemes) {
+std::list<Token> SyntacticalAnalyzer::compile(
+    const std::list<std::string> &lexemes) {
   std::list<Token> out_list;
 
   // parses the token into token names
@@ -37,7 +37,8 @@ std::list<Token> SyntacticalAnalyzer::compile(const std::list<std::string> &lexe
   // additionaly parses operators + and - into unary
   TokenName prew_name = TokenName::kOperator;
   for (Token &token : out_list) {
-    if (prew_name == TokenName::kOperator || prew_name == TokenName::kUnary || prew_name == TokenName::kOpenBracket) {
+    if (prew_name == TokenName::kOperator || prew_name == TokenName::kUnary ||
+        prew_name == TokenName::kOpenBracket) {
       if (token.GetValue() == "+" || token.GetValue() == "-") {
         if (token == TokenName::kOperator || token == TokenName::kOpenBracket) {
           token.rename(TokenName::kUnary);
@@ -50,5 +51,4 @@ std::list<Token> SyntacticalAnalyzer::compile(const std::list<std::string> &lexe
   return out_list;
 }
 
-}  // namespace math
 }  // namespace s21

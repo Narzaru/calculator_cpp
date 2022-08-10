@@ -1,5 +1,5 @@
-#ifndef SRC_MODELS_CALCULATOR_TOKEN_COMPILER_H_
-#define SRC_MODELS_CALCULATOR_TOKEN_COMPILER_H_
+#ifndef SRC_MODELS_CALCULATOR_SYNTACTICAL_ANALYZER_H_
+#define SRC_MODELS_CALCULATOR_SYNTACTICAL_ANALYZER_H_
 
 #include <list>
 #include <string>
@@ -8,8 +8,7 @@
 #include "token.h"
 #include "lexeme_analyzer.h"
 
-namespace s21 {
-namespace math {
+namespace s21::math {
 
 class ISyntacticalAnalyzer {
  public:
@@ -27,6 +26,5 @@ class SyntacticalAnalyzer final : public ISyntacticalAnalyzer, public LexemeAnal
   [[nodiscard]] TokenName GetTokenName(const std::string &lexeme);
 };
 
-}  // namespace math
 }  // namespace s21
-#endif  // SRC_MODELS_CALCULATOR_TOKEN_COMPILER_H_
+#endif  // SRC_MODELS_CALCULATOR_SYNTACTICAL_ANALYZER_H_
