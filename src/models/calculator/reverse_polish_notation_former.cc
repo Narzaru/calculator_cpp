@@ -19,7 +19,7 @@ std::list<Token> ReversePolishNotationFormer::create(std::list<Token> tokens) {
     } else if (token == TokenName::kFunction) {
       stack.push(std::move(token));
     } else if (token == TokenName::kOperator || token == TokenName::kUnary) {
-      while (!stack.empty() && stack.top() == TokenName::kOperator &&
+      while (!stack.empty() && (stack.top() == TokenName::kOperator || stack.top() == TokenName::kUnary) &&
              ((is_left_associative(token) &&
                (priority(stack.top()) >= priority(token))) ||
               (is_right_associative(token) &&
@@ -35,14 +35,14 @@ std::list<Token> ReversePolishNotationFormer::create(std::list<Token> tokens) {
         out_tokens.push_back(std::move(stack.top()));
         stack.pop();
       }
-      stack.pop();
       if (stack.empty()) {
         error_occurred = true;
       } else {
-        if (stack.top() == TokenName::kFunction) {
-          out_tokens.push_back(std::move(stack.top()));
-          stack.pop();
-        }
+        stack.pop();
+      }
+      if (!stack.empty() && (stack.top() == TokenName::kFunction)) {
+        out_tokens.push_back(std::move(stack.top()));
+        stack.pop();
       }
     } else {
       error_occurred = true;
