@@ -22,8 +22,8 @@ class Calculator {
   [[nodiscard]] double calculate(const double *x);
   [[nodiscard]] bool is_success() const;
 
-  [[nodiscard]] double calculate(const std::string &exression);
-  [[nodiscard]] double calculate(const std::string &exression, const double *x);
+  [[nodiscard]] double calculate(const std::string &expression);
+  [[nodiscard]] double calculate(const std::string &expression, const double *x);
 
  private:
   math::ILexicalAnalyzer *lexical_analyzer;

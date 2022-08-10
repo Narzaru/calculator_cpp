@@ -2,6 +2,7 @@
 
 #include <cstddef>
 
+#include "calculator_base_exceptions.h"
 #include "lexical_analyzer.h"
 #include "reverse_polish_notation_calc.h"
 #include "reverse_polish_notation_former.h"
@@ -29,27 +30,12 @@ Calculator &Calculator::push_expression(std::string expression) noexcept {
 
 Calculator &Calculator::compile_expression() {
   std::list<std::string> list_of_lexemes;
-  try {
-    list_of_lexemes = lexical_analyzer->ParseString(expression_);
-  } catch (const std::string &message) {
-    std::cout << message;
-    is_have_any_error_ = true;
-  }
+  list_of_lexemes = lexical_analyzer->ParseString(expression_);
 
   std::list<s21::math::Token> list_of_tokens;
-  try {
-    list_of_tokens = syntactical_analyzer->compile(list_of_lexemes);
-  } catch (const std::string &message) {
-    std::cout << message;
-    is_have_any_error_ = true;
-  }
+  list_of_tokens = syntactical_analyzer->compile(list_of_lexemes);
 
-  try {
-    list_of_tokens = rpn_former->create(list_of_tokens);
-  } catch (const std::string &message) {
-    std::cout << message;
-    is_have_any_error_ = true;
-  }
+  list_of_tokens = rpn_former->create(list_of_tokens);
 
   rpn_tokens_ = list_of_tokens;
 
@@ -66,14 +52,14 @@ double Calculator::calculate(const double *x) {
 
 bool Calculator::is_success() const { return !is_have_any_error_; }
 
-double Calculator::calculate(const std::string &exression) {
-  return calculate(exression, nullptr);
+double Calculator::calculate(const std::string &expression) {
+  return calculate(expression, nullptr);
 }
 
-double Calculator::calculate(const std::string &exression, const double *x) {
+double Calculator::calculate(const std::string &expression, const double *x) {
   std::list<std::string> list_of_lexemes;
   try {
-    list_of_lexemes = lexical_analyzer->ParseString(exression);
+    list_of_lexemes = lexical_analyzer->ParseString(expression);
   } catch (const std::string &message) {
     std::cout << message;
     is_have_any_error_ = true;
