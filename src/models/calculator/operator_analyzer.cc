@@ -4,9 +4,9 @@
 
 namespace s21::math {
 
-int OperatorAnalyzer::priority(const Token& token) const {
+int OperatorAnalyzer::Priority(const Token &token) const {
   int priority = 0;
-  const std::string& lexeme = token.GetValue();
+  const std::string &lexeme = token.GetValue();
 
   if (token != TokenName::kUnary && (lexeme == "+" || lexeme == "-")) {
     priority = 1;
@@ -24,15 +24,15 @@ int OperatorAnalyzer::priority(const Token& token) const {
   return priority;
 }
 
-bool OperatorAnalyzer::is_right_associative(const Token& token) const {
+bool OperatorAnalyzer::IsRightAssociative(const Token &token) const {
   if (token.GetName() == TokenName::kUnary || token.GetValue() == "pow" || token.GetValue() == "^") {
     return true;
   }
   return false;
 }
 
-bool OperatorAnalyzer::is_left_associative(const Token& token) const {
-  return !is_right_associative(token);
+bool OperatorAnalyzer::IsLeftAssociative(const Token &token) const {
+  return !IsRightAssociative(token);
 }
 
-}  // namespace s21
+}  // namespace s21::math

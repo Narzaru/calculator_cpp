@@ -31,24 +31,23 @@ namespace math {
 
 class IReversePolishNotationCalculator {
  public:
-  [[nodiscard]] virtual double calculate(const std::list<Token> &postfix_tokens) const = 0;
-  [[nodiscard]] virtual double calculate(const std::list<Token> &postfix_tokens,
-                           const double *x) const = 0;
+  [[nodiscard]] virtual double Calculate(const std::list<Token> &postfix_tokens) const = 0;
+  [[nodiscard]] virtual double Calculate(const std::list<Token> &postfix_tokens, const double *x) const = 0;
   virtual ~IReversePolishNotationCalculator() = default;
 };
 
 class ReversePolishNotationCalculator
     : public IReversePolishNotationCalculator {
  public:
-  template <typename... args>
+  template<typename... args>
   using fptr = double (*)(args...);
-  [[nodiscard]] double calculate(const std::list<Token> &postfix_tokens) const override;
-  [[nodiscard]] double calculate(const std::list<Token> &postfix_tokens, const double *x) const override;
+  [[nodiscard]] double Calculate(const std::list<Token> &postfix_tokens) const override;
+  [[nodiscard]] double Calculate(const std::list<Token> &postfix_tokens, const double *x) const override;
 
  private:
-  [[nodiscard]] fptr<double> get_function(const Token &token) const;
-  [[nodiscard]] fptr<double, double> get_operator(const Token &token) const;
-  Token calc(std::stack<Token> *stack, Token token) const;
+  [[nodiscard]] fptr<double> GetFunction(const Token &token) const;
+  [[nodiscard]] fptr<double, double> GetOperator(const Token &token) const;
+  Token Calc(std::stack<Token> *stack, Token token) const;
 };
 
 }  // namespace math

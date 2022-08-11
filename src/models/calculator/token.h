@@ -31,13 +31,13 @@ class Token {
 
   [[nodiscard]] TokenName GetName() const { return name_; }
   [[nodiscard]] const std::string &GetValue() const { return value_; }
-  Token &rename(TokenName name);
+  Token &Rename(TokenName name);
 
  private:
   TokenName name_;
   std::string value_;
 };
 
-}  // namespace s21
+}  // namespace s21::math
 
 #endif  // SRC_MODELS_CALCULATOR_TOKEN_H_

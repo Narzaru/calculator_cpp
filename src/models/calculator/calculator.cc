@@ -1,7 +1,5 @@
 #include "calculator.h"
 
-#include <cstddef>
-
 #include "calculator_base_exceptions.h"
 #include "lexical_analyzer.h"
 #include "reverse_polish_notation_calc.h"
@@ -33,9 +31,9 @@ Calculator &Calculator::compile_expression() {
   list_of_lexemes = lexical_analyzer->ParseString(expression_);
 
   std::list<s21::math::Token> list_of_tokens;
-  list_of_tokens = syntactical_analyzer->compile(list_of_lexemes);
+  list_of_tokens = syntactical_analyzer->Compile(list_of_lexemes);
 
-  list_of_tokens = rpn_former->create(list_of_tokens);
+  list_of_tokens = rpn_former->Create(list_of_tokens);
 
   rpn_tokens_ = list_of_tokens;
 
@@ -47,7 +45,7 @@ double Calculator::calculate() {
 }
 
 double Calculator::calculate(const double *x) {
-  return rpn_calculator->calculate(rpn_tokens_, x);
+  return rpn_calculator->Calculate(rpn_tokens_, x);
 }
 
 bool Calculator::is_success() const { return !is_have_any_error_; }
@@ -67,20 +65,20 @@ double Calculator::calculate(const std::string &expression, const double *x) {
 
   std::list<s21::math::Token> list_of_tokens;
   try {
-    list_of_tokens = syntactical_analyzer->compile(list_of_lexemes);
+    list_of_tokens = syntactical_analyzer->Compile(list_of_lexemes);
   } catch (const std::string &message) {
     std::cout << message;
     is_have_any_error_ = true;
   }
 
   try {
-    list_of_tokens = rpn_former->create(list_of_tokens);
+    list_of_tokens = rpn_former->Create(list_of_tokens);
   } catch (const std::string &message) {
     std::cout << message;
     is_have_any_error_ = true;
   }
 
-  return rpn_calculator->calculate(list_of_tokens, x);
+  return rpn_calculator->Calculate(list_of_tokens, x);
 }
 
 }  // namespace s21

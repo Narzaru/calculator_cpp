@@ -9,8 +9,7 @@
 #include "token.h"
 #include "syntactical_analyzer.h"
 
-namespace s21 {
-namespace math {
+namespace s21::math {
 
 class ILexicalAnalyzer {
  public:
@@ -20,9 +19,9 @@ class ILexicalAnalyzer {
 
 class LexicalAnalyzer : public ILexicalAnalyzer {
   using string = std::string;
-  template <typename T>
+  template<typename T>
   using list = std::list<T>;
-  template <typename T>
+  template<typename T>
   using vector = std::vector<T>;
   using size_type = std::size_t;
 
@@ -32,7 +31,7 @@ class LexicalAnalyzer : public ILexicalAnalyzer {
 
  private:
   // A delimiter is a math operations and brackets
-  vector<string> delimiters{" ", "(", ")", "+",   "-",  "*",
+  vector<string> delimiters{" ", "(", ")", "+", "-", "*",
                             "/", "^", "%", "mod", "pow"};
 
   void ClearSpaces(string *string);
@@ -41,6 +40,5 @@ class LexicalAnalyzer : public ILexicalAnalyzer {
   size_type GetSequenceLength(const string &string, size_type position);
 };
 
-}  // namespace math
-}  // namespace s21
+}  // namespace s21::math
 #endif  // SRC_MODELS_CALCULATOR_LEXICAL_ANALYZER_H_

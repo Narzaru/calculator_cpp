@@ -7,7 +7,7 @@
 #include "token.h"
 
 namespace s21::math {
-std::list<Token> ReversePolishNotationFormer::create(const std::list<Token> &tokens) {
+std::list<Token> ReversePolishNotationFormer::Create(const std::list<Token> &tokens) {
   if (!IsValidTokens(tokens)) {
     throw -1;
   }
@@ -23,10 +23,10 @@ std::list<Token> ReversePolishNotationFormer::create(const std::list<Token> &tok
       stack.push(token);
     } else if (token == TokenName::kOperator || token == TokenName::kUnary) {
       while (!stack.empty() && (stack.top() == TokenName::kOperator || stack.top() == TokenName::kUnary) &&
-             ((is_left_associative(token) &&
-               (priority(stack.top()) >= priority(token))) ||
-              (is_right_associative(token) &&
-               priority(stack.top()) > priority(token)))) {
+          ((IsLeftAssociative(token) &&
+              (Priority(stack.top()) >= Priority(token))) ||
+              (IsRightAssociative(token) &&
+                  Priority(stack.top()) > Priority(token)))) {
         out_tokens.push_back(std::move(stack.top()));
         stack.pop();
       }
@@ -77,4 +77,4 @@ bool ReversePolishNotationFormer::IsValidTokens(const std::list<Token> &tokens) 
   return true;
 }
 
-}  // namespace s21
+}  // namespace s21::math

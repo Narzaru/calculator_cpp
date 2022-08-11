@@ -6,7 +6,7 @@
 #include <list>
 #include <ostream>
 
-#include "../models/calculator/infix_math_compiler.h"
+#include "../models/calculator/calculator.h"
 
 TEST(suite, test_1) {
   s21::math::LexicalAnalyzer lexical_analyzer;
@@ -18,11 +18,11 @@ TEST(suite, test_1) {
     list_of_lexemes = lexical_analyzer.ParseString("2 ^ 2 ^ 3 + 1");
 
   std::list<s21::math::Token> infix_list_of_tokens;
-    infix_list_of_tokens = syntatic_analyzer.compile(list_of_lexemes);
+    infix_list_of_tokens = syntatic_analyzer.Compile(list_of_lexemes);
   std::list<s21::math::Token> postfix_list_of_tokens;
-    postfix_list_of_tokens = rpn.create(infix_list_of_tokens);
+    postfix_list_of_tokens = rpn.Create(infix_list_of_tokens);
 
-  double res = rpnc.calculate(postfix_list_of_tokens, nullptr);
+  double res = rpnc.Calculate(postfix_list_of_tokens, nullptr);
   std::cout << std::endl << res << std::endl;
 }
 

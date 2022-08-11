@@ -8,11 +8,11 @@
 #include "token.h"
 
 namespace s21::math {
-double ReversePolishNotationCalculator::calculate(const std::list<Token> &postfix_tokens) const {
-  return calculate(postfix_tokens, nullptr);
+double ReversePolishNotationCalculator::Calculate(const std::list<Token> &postfix_tokens) const {
+  return Calculate(postfix_tokens, nullptr);
 }
 
-double ReversePolishNotationCalculator::calculate(
+double ReversePolishNotationCalculator::Calculate(
     const std::list<Token> &postfix_tokens, const double *x) const {
   std::stack<Token> stack;
 
@@ -24,8 +24,8 @@ double ReversePolishNotationCalculator::calculate(
         stack.emplace(item.GetName(), item.GetValue());
       }
     } else if (item == TokenName::kOperator || item == TokenName::kUnary ||
-               item == TokenName::kFunction) {
-      stack.push(calc(&stack, item));
+        item == TokenName::kFunction) {
+      stack.push(Calc(&stack, item));
     } else {
       throw ReversePolishNotationCalcExceptions("unresolved token type");
     }
@@ -34,7 +34,7 @@ double ReversePolishNotationCalculator::calculate(
 }
 
 ReversePolishNotationCalculator::fptr<double>
-ReversePolishNotationCalculator::get_function(const Token &token) const {
+ReversePolishNotationCalculator::GetFunction(const Token &token) const {
   if (token.GetValue() == "cos") {
     return std::cos;
   } else if (token.GetValue() == "sin") {
@@ -63,7 +63,7 @@ ReversePolishNotationCalculator::get_function(const Token &token) const {
 }
 
 ReversePolishNotationCalculator::fptr<double, double>
-ReversePolishNotationCalculator::get_operator(const Token &token) const {
+ReversePolishNotationCalculator::GetOperator(const Token &token) const {
   if (token.GetValue() == "+") {
     return [](double l, double r) { return l + r; };
   } else if (token.GetValue() == "-") {
@@ -81,7 +81,7 @@ ReversePolishNotationCalculator::get_operator(const Token &token) const {
       "math operator not found or not implemented");
 }
 
-Token ReversePolishNotationCalculator::calc(std::stack<Token> *stack, Token token) const {
+Token ReversePolishNotationCalculator::Calc(std::stack<Token> *stack, Token token) const {
   fptr<double> function;
   fptr<double, double> operation;
 
@@ -89,7 +89,7 @@ Token ReversePolishNotationCalculator::calc(std::stack<Token> *stack, Token toke
   stack->pop();
 
   if (token == TokenName::kFunction || token == TokenName::kUnary) {
-    function = get_function(token);
+    function = GetFunction(token);
     right_number = function(right_number);
     return {TokenName::kNumber, std::to_string(right_number)};
   } else if (token == TokenName::kOperator) {
@@ -99,7 +99,7 @@ Token ReversePolishNotationCalculator::calc(std::stack<Token> *stack, Token toke
     }
     double left_number = std::stod(stack->top().GetValue());
     stack->pop();
-    operation = get_operator(token);
+    operation = GetOperator(token);
     right_number = operation(left_number, right_number);
     return {TokenName::kNumber, std::to_string(right_number)};
   } else {
@@ -108,4 +108,4 @@ Token ReversePolishNotationCalculator::calc(std::stack<Token> *stack, Token toke
   }
 }
 
-}  // namespace s21
+}  // namespace s21::math

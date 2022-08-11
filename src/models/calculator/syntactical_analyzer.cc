@@ -1,7 +1,5 @@
 #include "syntactical_analyzer.h"
 
-#include <cstddef>
-#include <iterator>
 #include <string>
 
 #include "token.h"
@@ -25,7 +23,7 @@ TokenName SyntacticalAnalyzer::GetTokenName(const std::string &lexeme) {
   return TokenName::kWrong;
 }
 
-std::list<Token> SyntacticalAnalyzer::compile(
+std::list<Token> SyntacticalAnalyzer::Compile(
     const std::list<std::string> &lexemes) {
   std::list<Token> out_list;
 
@@ -41,7 +39,7 @@ std::list<Token> SyntacticalAnalyzer::compile(
         prew_name == TokenName::kOpenBracket) {
       if (token.GetValue() == "+" || token.GetValue() == "-") {
         if (token == TokenName::kOperator || token == TokenName::kOpenBracket) {
-          token.rename(TokenName::kUnary);
+          token.Rename(TokenName::kUnary);
         }
       }
     }
@@ -51,4 +49,4 @@ std::list<Token> SyntacticalAnalyzer::compile(
   return out_list;
 }
 
-}  // namespace s21
+}  // namespace s21::math

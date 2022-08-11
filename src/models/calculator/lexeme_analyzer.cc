@@ -112,4 +112,4 @@ bool LexemeAnalyzer::IsVariable(const std::string &lexeme) const {
   return false;
 }
 
-}  // namespace s21
+}  // namespace s21::math

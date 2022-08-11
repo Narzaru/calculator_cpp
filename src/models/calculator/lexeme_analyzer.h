@@ -30,11 +30,11 @@ class LexemeAnalyzer : public ILexemeAnalyzer {
 
  private:
   [[nodiscard]] bool IsDigit(int code) const;
-  std::vector<std::string> functions = {"cos",  "sin",  "tan", "acos", "asin",
-                                        "atan", "sqrt", "ln",  "log"};
+  std::vector<std::string> functions = {"cos", "sin", "tan", "acos", "asin",
+                                        "atan", "sqrt", "ln", "log"};
   std::vector<std::string> operators = {"+", "-", "*", "/", "^", "mod", "%"};
 };
 
-}  // namespace s21
+}  // namespace s21::math
 
 #endif  // SRC_MODELS_CALCULATOR_LEXEME_ANALYZER_H_

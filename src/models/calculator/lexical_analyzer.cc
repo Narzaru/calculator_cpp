@@ -67,4 +67,4 @@ std::size_t LexicalAnalyzer::GetSequenceLength(const string &string, size_type p
   return length;
 }
 
-}  // namespace s21
+}  // namespace s21::math

@@ -11,7 +11,7 @@
 namespace s21::math {
 
 class IReversePolishNotationFormerException : s21::exception::IMyBaseException {
-  public:
+ public:
   explicit IReversePolishNotationFormerException(const char *what) {
     who_ = "IReversePolishNotationFormer";
     what_ = what;
@@ -25,24 +25,24 @@ class IReversePolishNotationFormerException : s21::exception::IMyBaseException {
     return what_;
   }
 
-  private:
-    const char *who_;
-    const char *what_;
+ private:
+  const char *who_;
+  const char *what_;
 };
 
 class IReversePolishNotationFormer {
  public:
-  virtual std::list<Token> create(const std::list<Token> &tokens) = 0;
+  virtual std::list<Token> Create(const std::list<Token> &tokens) = 0;
   virtual ~IReversePolishNotationFormer() = default;
 };
 
 class ReversePolishNotationFormer final : public IReversePolishNotationFormer, public OperatorAnalyzer {
  public:
-  std::list<Token> create(const std::list<Token> &tokens) override;
+  std::list<Token> Create(const std::list<Token> &tokens) override;
  private:
   bool IsValidTokens(const std::list<Token> &tokens);
 };
 
-}  // namespace s21
+}  // namespace s21::math
 
 #endif  // SRC_MODELS_CALCULATOR_REVERSE_POLISH_NOTATION_FORMER_H_
