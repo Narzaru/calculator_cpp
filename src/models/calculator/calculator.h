@@ -16,11 +16,10 @@ class Calculator {
  public:
   Calculator();
   ~Calculator();
-  Calculator &push_expression(std::string expression) noexcept;
+  Calculator &push_expression(std::string expression);
   Calculator &compile_expression();
   [[nodiscard]] double calculate();
   [[nodiscard]] double calculate(const double *x);
-  [[nodiscard]] bool is_success() const;
 
   [[nodiscard]] double calculate(const std::string &expression);
   [[nodiscard]] double calculate(const std::string &expression, const double *x);
@@ -32,7 +31,6 @@ class Calculator {
   math::IReversePolishNotationCalculator *rpn_calculator;
   std::string expression_;
   std::list<math::Token> rpn_tokens_;
-  bool is_have_any_error_;
 };
 
 }  // namespace s21

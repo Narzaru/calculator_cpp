@@ -1,45 +1,82 @@
+#include <ctime>
+#include <exception>
 #include <gtest/gtest.h>
 
-#include <cstddef>
-#include <iomanip>
-#include <ios>
 #include <list>
+#include <locale>
+#include <new>
 #include <ostream>
 
 #include "../models/calculator/calculator.h"
+#include "../models/calculator/calculator_base_exceptions.h"
+
+std::ostream &operator<<(std::ostream &stream, s21::exception::IMyBaseException &e) {
+  stream << "[" << e.who() << "] ";
+  stream << e.what() << std::endl;
+  return stream;
+}
 
 TEST(suite, test_1) {
-  s21::math::LexicalAnalyzer lexical_analyzer;
-  s21::math::SyntacticalAnalyzer syntatic_analyzer;
-  s21::math::ReversePolishNotationFormer rpn;
-  s21::math::ReversePolishNotationCalculator rpnc;
-
-  std::list<std::string> list_of_lexemes;
-    list_of_lexemes = lexical_analyzer.ParseString("2 ^ 2 ^ 3 + 1");
-
-  std::list<s21::math::Token> infix_list_of_tokens;
-    infix_list_of_tokens = syntatic_analyzer.Compile(list_of_lexemes);
-  std::list<s21::math::Token> postfix_list_of_tokens;
-    postfix_list_of_tokens = rpn.Create(infix_list_of_tokens);
-
-  double res = rpnc.Calculate(postfix_list_of_tokens, nullptr);
-  std::cout << std::endl << res << std::endl;
+  s21::Calculator calc;
+  ASSERT_ANY_THROW(
+    calc.push_expression("cas(3)");
+    calc.compile_expression();
+    [[maybe_unused]] double a = calc.calculate();
+  );
 }
 
 TEST(suite, test_2) {
   s21::Calculator calc;
-  calc.push_expression("sin(cas(3))");
-  calc.compile_expression();
-  std::cout << calc.calculate() << std::endl;
+  ASSERT_ANY_THROW(
+    calc.push_expression("cas(");
+    calc.compile_expression();
+    [[maybe_unused]] double a = calc.calculate();
+  );
+}
+
+TEST(suite, test_5) {
+  s21::Calculator calc;
+  ASSERT_ANY_THROW(
+    calc.push_expression("cos(x)");
+    calc.compile_expression();
+    [[maybe_unused]] double a = calc.calculate();
+  );
 }
 
 TEST(suite, test_3) {
-  s21::Calculator calc;
+  s21::Calculator calculator;
   double x = 1;
-  std::cout << calc.calculate("-cos(sin(asin(atan(0.5))))^1*2-3/4%2*1e+1-1.e+0+x", &x) << std::endl;
+  ASSERT_NO_THROW(
+    [[maybe_unused]] double a = calculator.calculate("-cos(sin(asin(atan(0.5))))^1*2-3/4%2*1e+1-1.e+0+x", &x);
+  );
 }
 
 TEST(suite, test_4) {
-  s21::math::ILexicalAnalyzer *analyzer = new s21::math::LexicalAnalyzer;
-  delete analyzer;
+  s21::Calculator calculator;
+  ASSERT_NO_THROW(
+    double x = 1;
+    calculator.push_expression("-cos(sin(asin(atan(0.5))))^1*2-3/4%2*1e+1-1.e+0+x");
+    calculator.compile_expression();
+    [[maybe_unused]] double a = calculator.calculate(&x);
+  );
+}
+
+TEST(suite, test_6) {
+  s21::Calculator calculator;
+  ASSERT_NO_THROW(
+    double x = 1;
+    calculator.push_expression("+cos(sin(asin(atan(0.5))))^1*2-3/4%2*1e+1-1.e+0+x");
+    calculator.compile_expression();
+    [[maybe_unused]] double a = calculator.calculate(&x);
+  );
+}
+
+TEST(suite, test_7) {
+  s21::Calculator calculator;
+  ASSERT_ANY_THROW(
+    double x = 1;
+    calculator.push_expression("3+");
+    calculator.compile_expression();
+    [[maybe_unused]] double a = calculator.calculate(&x);
+  );
 }

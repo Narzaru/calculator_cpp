@@ -2,7 +2,7 @@ UNAME := $(shell uname)
 
 TARGET = s21_calc
 
-CXX := g++ -std=c++17
+CXX := g++ -std=c++17 -O3
 
 BUILD_DIR := ./build
 
@@ -46,6 +46,8 @@ clean:
 	find -name "*.gcno" -delete
 	find -name "*.gcda" -delete
 	rm -f tests
+	rm -f tests.info
+	rm -rf gcov_report
 
 dvi:
 
@@ -53,7 +55,7 @@ dist:
 
 ## Model obj
 $(CALC_BUILD_DIR)/%.o: $(CALC_DIR)/%.cc
-	$(CXX) -MD $(CXXFLAGS) -c $< -o $@
+	$(CXX) -MD $(CXXFLAGS) -c $< -o $@ --coverage
 
 ## Model static library
 $(CALC_BUILD_DIR)/calc-all.a: $(CALC_OBJS)
@@ -64,7 +66,7 @@ $(TEST_BUILD_DIR)/%.o: $(TEST_DIR)/%.cc
 	$(CXX) -MD $(CXXFLAGS) -c $< -o $@
 
 tests: $(TEST_OBJS) $(CALC_BUILD_DIR)/calc-all.a
-	$(CXX) $(CXXFLAGS) -Itest/ -Imodels/calculator/ $^ -lgtest -o tests
+	$(CXX) $(CXXFLAGS) -Itest/ -Imodels/calculator/ $^ -lgtest -o tests -lgcov
 
 linter:
 	@cp ../materials/linters/CPPLINT.cfg .

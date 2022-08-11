@@ -9,7 +9,7 @@
 namespace s21::math {
 
 std::list<std::string> LexicalAnalyzer::ParseString(string expression) {
-  list<string> Tokens;
+  list<string> lexemes;
   ClearSpaces(&expression);
 
   size_type sequence_length = 0;
@@ -20,10 +20,10 @@ std::list<std::string> LexicalAnalyzer::ParseString(string expression) {
       sequence_length = GetSequenceLength(expression, i);
     }
     const string &str_lexeme = expression.substr(i, sequence_length);
-    Tokens.emplace_back(str_lexeme);
+    lexemes.emplace_back(str_lexeme);
   }
 
-  return Tokens;
+  return lexemes;
 }
 
 void LexicalAnalyzer::ClearSpaces(string *expr_str) {

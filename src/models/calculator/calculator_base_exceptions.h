@@ -2,6 +2,7 @@
 #define SRC_MODELS_CALCULATOR_CALCULATOR_BASE_EXCEPTIONS_H_
 
 #include <exception>
+
 namespace s21::exception {
 class IMyBaseException : public std::exception {
  public:

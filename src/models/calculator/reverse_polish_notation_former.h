@@ -10,9 +10,9 @@
 
 namespace s21::math {
 
-class IReversePolishNotationFormerException : s21::exception::IMyBaseException {
+class ReversePolishNotationFormerException : public s21::exception::IMyBaseException {
  public:
-  explicit IReversePolishNotationFormerException(const char *what) {
+  explicit ReversePolishNotationFormerException(const char *what) {
     who_ = "IReversePolishNotationFormer";
     what_ = what;
   }

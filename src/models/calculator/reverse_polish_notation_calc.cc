@@ -2,6 +2,9 @@
 #include "reverse_polish_notation_calc.h"
 
 #include <cmath>
+#include <functional>
+#include <limits>
+#include <math.h>
 #include <stack>
 #include <string>
 
@@ -18,8 +21,12 @@ double ReversePolishNotationCalculator::Calculate(
 
   for (const auto &item : postfix_tokens) {
     if (item == TokenName::kNumber || item == TokenName::kVariable) {
-      if (x != nullptr && item == TokenName::kVariable) {
-        stack.emplace(TokenName::kNumber, std::to_string(*x));
+      if (item == TokenName::kVariable) {
+        if (x != nullptr) {
+          stack.emplace(TokenName::kNumber, std::to_string(*x));
+        } else {
+          throw ReversePolishNotationCalcExceptions("x is not set");
+        }
       } else {
         stack.emplace(item.GetName(), item.GetValue());
       }
@@ -29,6 +36,9 @@ double ReversePolishNotationCalculator::Calculate(
     } else {
       throw ReversePolishNotationCalcExceptions("unresolved token type");
     }
+  }
+  if (stack.empty()) {
+    throw ReversePolishNotationCalcExceptions("expression has no solution");
   }
   return std::stod(stack.top().GetValue());
 }
@@ -58,8 +68,7 @@ ReversePolishNotationCalculator::GetFunction(const Token &token) const {
   } else if (token.GetValue() == "+") {
     return [](double l) { return l; };
   }
-  throw ReversePolishNotationCalcExceptions(
-      "math function not found or not implemented");
+  throw ReversePolishNotationCalcExceptions("math function not found or not implemented");
 }
 
 ReversePolishNotationCalculator::fptr<double, double>
@@ -69,42 +78,46 @@ ReversePolishNotationCalculator::GetOperator(const Token &token) const {
   } else if (token.GetValue() == "-") {
     return [](double l, double r) { return l - r; };
   } else if (token.GetValue() == "/") {
-    return [](double l, double r) { return l / r; };
+    return [](double l, double r) {
+      if (std::fabs(r) <= std::numeric_limits<float>::epsilon()) {
+        return std::numeric_limits<double>::quiet_NaN();
+      }
+      return l / r;
+    };
   } else if (token.GetValue() == "*") {
     return [](double l, double r) { return l * r; };
   } else if (token.GetValue() == "^") {
-    return [](double l, double r) { return std::pow<double>(l, r); };
+    return [](double l, double r) { return std::pow(l, r); };
   } else if (token.GetValue() == "mod" || token.GetValue() == "%") {
     return [](double l, double r) { return std::fmod(l, r); };
   }
-  throw ReversePolishNotationCalcExceptions(
-      "math operator not found or not implemented");
+  throw ReversePolishNotationCalcExceptions("math operator not found or not implemented");
 }
 
 Token ReversePolishNotationCalculator::Calc(std::stack<Token> *stack, Token token) const {
-  fptr<double> function;
-  fptr<double, double> operation;
+  double left_operand = std::numeric_limits<double>::quiet_NaN();
+  double right_operand = std::numeric_limits<double>::quiet_NaN();
 
-  double right_number = std::stod(stack->top().GetValue());
+  if (stack->empty()) {
+    throw ReversePolishNotationCalcExceptions("not enought operands for an operation");
+  }
+  right_operand = std::stod(stack->top().GetValue());
   stack->pop();
 
-  if (token == TokenName::kFunction || token == TokenName::kUnary) {
-    function = GetFunction(token);
-    right_number = function(right_number);
-    return {TokenName::kNumber, std::to_string(right_number)};
-  } else if (token == TokenName::kOperator) {
+  if (token == TokenName::kOperator) {
     if (stack->empty()) {
-      throw ReversePolishNotationCalcExceptions(
-          "mathematical expression contains an error");
+      throw ReversePolishNotationCalcExceptions("not enought operands for an operation");
     }
-    double left_number = std::stod(stack->top().GetValue());
+    left_operand = std::stod(stack->top().GetValue());
     stack->pop();
-    operation = GetOperator(token);
-    right_number = operation(left_number, right_number);
-    return {TokenName::kNumber, std::to_string(right_number)};
+  }
+
+  if (token == TokenName::kFunction || token == TokenName::kUnary) {
+    return {TokenName::kNumber, std::to_string(GetFunction(token)(right_operand))};
+  } else if (token == TokenName::kOperator) {
+    return {TokenName::kNumber, std::to_string(GetOperator(token)(left_operand, right_operand))};
   } else {
-    throw ReversePolishNotationCalcExceptions(
-        "mathematical expression contains an error");
+    throw ReversePolishNotationCalcExceptions("token are not a operator");
   }
 }
 

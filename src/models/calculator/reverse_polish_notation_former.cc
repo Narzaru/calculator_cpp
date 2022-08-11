@@ -9,7 +9,7 @@
 namespace s21::math {
 std::list<Token> ReversePolishNotationFormer::Create(const std::list<Token> &tokens) {
   if (!IsValidTokens(tokens)) {
-    throw -1;
+    throw ReversePolishNotationFormerException("list of tokens contains a wrong or empty token");
   }
 
   [[maybe_unused]] bool error_occurred = false;

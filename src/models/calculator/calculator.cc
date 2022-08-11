@@ -21,7 +21,7 @@ Calculator::~Calculator() {
   delete rpn_calculator;
 }
 
-Calculator &Calculator::push_expression(std::string expression) noexcept {
+Calculator &Calculator::push_expression(std::string expression) {
   expression_ = std::move(expression);
   return *this;
 }
@@ -48,35 +48,18 @@ double Calculator::calculate(const double *x) {
   return rpn_calculator->Calculate(rpn_tokens_, x);
 }
 
-bool Calculator::is_success() const { return !is_have_any_error_; }
-
 double Calculator::calculate(const std::string &expression) {
   return calculate(expression, nullptr);
 }
 
 double Calculator::calculate(const std::string &expression, const double *x) {
   std::list<std::string> list_of_lexemes;
-  try {
-    list_of_lexemes = lexical_analyzer->ParseString(expression);
-  } catch (const std::string &message) {
-    std::cout << message;
-    is_have_any_error_ = true;
-  }
+  list_of_lexemes = lexical_analyzer->ParseString(expression);
 
   std::list<s21::math::Token> list_of_tokens;
-  try {
-    list_of_tokens = syntactical_analyzer->Compile(list_of_lexemes);
-  } catch (const std::string &message) {
-    std::cout << message;
-    is_have_any_error_ = true;
-  }
+  list_of_tokens = syntactical_analyzer->Compile(list_of_lexemes);
 
-  try {
-    list_of_tokens = rpn_former->Create(list_of_tokens);
-  } catch (const std::string &message) {
-    std::cout << message;
-    is_have_any_error_ = true;
-  }
+  list_of_tokens = rpn_former->Create(list_of_tokens);
 
   return rpn_calculator->Calculate(list_of_tokens, x);
 }
