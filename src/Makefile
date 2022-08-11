@@ -2,7 +2,7 @@ UNAME := $(shell uname)
 
 TARGET = s21_calc
 
-CXX := g++
+CXX := g++ -std=c++17
 
 BUILD_DIR := ./build
 
@@ -43,6 +43,9 @@ clean:
 	find -name "*.d" -delete
 	find -name "*.o" -delete
 	find -name "*.a" -delete
+	find -name "*.gcno" -delete
+	find -name "*.gcda" -delete
+	rm -f tests
 
 dvi:
 
@@ -69,5 +72,11 @@ linter:
 	@find . -name "*.h" -exec python3 ../materials/linters/cpplint.py {} \;
 	@rm -f CPPLINT.cfg
 
+gcov_report: tests
+	./tests
+	lcov --directory . -t "tests" -o tests.info -c --no-external
+	genhtml -o gcov_report tests.info
+	@echo
+	@echo report path is `pwd`/report/index.html
 
 .PHONY: all install uninstall clean dvi dist linter
