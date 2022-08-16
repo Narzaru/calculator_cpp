@@ -55,9 +55,11 @@ dist:
 
 ## Model obj
 $(CALC_BUILD_DIR)/%.o: $(CALC_DIR)/%.cc
-	$(CXX) -MD $(CXXFLAGS) -c $< -o $@ --coverage
+	$(CXX) -MD $(CXXFLAGS) -c $< -o $@
+
 
 ## Model static library
+calc-all.a: $(CALC_BUILD_DIR)/calc-all.a
 $(CALC_BUILD_DIR)/calc-all.a: $(CALC_OBJS)
 	ar rcs $@ $^
 
@@ -65,8 +67,12 @@ $(CALC_BUILD_DIR)/calc-all.a: $(CALC_OBJS)
 $(TEST_BUILD_DIR)/%.o: $(TEST_DIR)/%.cc
 	$(CXX) -MD $(CXXFLAGS) -c $< -o $@
 
-tests: $(TEST_OBJS) $(CALC_BUILD_DIR)/calc-all.a
+tests: $(TEST_OBJS) calc-all.a
 	$(CXX) $(CXXFLAGS) -Itest/ -Imodels/calculator/ $^ -lgtest -o tests -lgcov
+
+## Build calc
+s21_calc: calc-all.a
+	g++ -g main.c ./view/gtk/calculator.h ./controller/calculator_controller.h ./build/calculator/calc-all.a -fsanitize=address `pkg-config gtkmm-3.0 --cflags --libs`
 
 linter:
 	@cp ../materials/linters/CPPLINT.cfg .
@@ -82,3 +88,6 @@ gcov_report: tests
 	@echo report path is `pwd`/report/index.html
 
 .PHONY: all install uninstall clean dvi dist linter
+
+
+#g++ main.cc -o simple -g -fsanitize=leak `pkg-config gtkmm-3.0 --cflags --libs` ../../build/calculator/calc-all.a -lgcov && ./simple

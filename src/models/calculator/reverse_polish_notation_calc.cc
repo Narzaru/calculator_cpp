@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include <functional>
+#include <iostream>
 #include <limits>
 #include <math.h>
 #include <stack>

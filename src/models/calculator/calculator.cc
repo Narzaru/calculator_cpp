@@ -7,6 +7,7 @@
 #include "syntactical_analyzer.h"
 
 namespace s21 {
+namespace calculator {
 Calculator::Calculator() {
   lexical_analyzer = new math::LexicalAnalyzer;
   syntactical_analyzer = new math::SyntacticalAnalyzer;
@@ -63,5 +64,5 @@ double Calculator::calculate(const std::string &expression, const double *x) {
 
   return rpn_calculator->Calculate(list_of_tokens, x);
 }
-
+}  // namespace calculator
 }  // namespace s21

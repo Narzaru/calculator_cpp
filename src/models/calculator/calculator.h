@@ -11,7 +11,7 @@
 #include "token.h"
 
 namespace s21 {
-
+namespace calculator {
 class Calculator {
  public:
   Calculator();
@@ -33,6 +33,7 @@ class Calculator {
   std::list<math::Token> rpn_tokens_;
 };
 
+}  // namespace calculator
 }  // namespace s21
 
 #endif  // SRC_MODELS_CALCULATOR_CALCULATOR_H_
