@@ -1,93 +1,61 @@
-UNAME := $(shell uname)
+CXX := g++
+CXXFLAGS := -MD
 
-TARGET = s21_calc
-
-CXX := g++ -std=c++17 -O3
-
-BUILD_DIR := ./build
-
-# Build calculator module
-CALC_DIR := ./models/calculator
-CALC_BUILD_DIR := $(BUILD_DIR)/calculator
-CALC_SRCS := $(shell find $(CALC_DIR) -name "*.cc")
-CALC_OBJS := $(addprefix $(CALC_BUILD_DIR)/,$(notdir $(CALC_SRCS:%.cc=%.o)))
-CALC_DEPS := $(CALC_OBJS:.o=.d)
-
-TEST_DIR := ./test
-TEST_BUILD_DIR := $(BUILD_DIR)/test
-TEST_SRCS := $(shell find $(TEST_DIR) -name "*.cc*")
-TEST_OBJS := $(addprefix $(TEST_BUILD_DIR)/,$(notdir $(TEST_SRCS:%.cc=%.o)))
-TEST_DEPS := $(TEST_OBJS:.o=.d)
-
--include $(CALC_DEPS)
--include $(TEST_DEPS)
-
-DEBUG = True
-ifeq ($(DEBUG), True)
-	CXXFLAGS := -Wall -Wextra
-	ifeq ($(UNAME), Linux)
-		CXXFLAGS := $(CXXFLAGS) -g -fsanitize=address
-	else ifeq ($(UNAME), Darwin)
-		CXXFLAGS := $(CXXFLAGS) -g
+ifeq (true, true)
+	CXXFLAGS += -Wall -Wextra
+	ifeq ($(shell uname), Linux)
+		CXXFLAGS += -g -fsanitize=address
+	else ifeq ($(shell uname), Darwin)
+		CXXFLAGS += -g
 	endif
 endif
 
-all: tests
-	./tests
+# Libcalculator.a
+CALC_BUILD_DIR = build/calculator
+CALC_SRCS = $(shell find ./models/calculator -name "*.cc")
+CALC_OBJS = $(addprefix $(CALC_BUILD_DIR)/,$(notdir $(CALC_SRCS:%.cc=%.o)))
+CALC_DEPS = $(CALC_OBJS:%.o=%.c)
 
-install:
+vpath %.cc models/calculator/
+$(CALC_BUILD_DIR)/%.o: %.cc
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-uninstall:
+$(CALC_BUILD_DIR)/libcalculator.a: $(CALC_OBJS)
+	ar rcs $@ $^
+vpath
+
+# Tests
+TESTS_BUILD_DIR = build/test
+TESTS_SRCS = $(shell find ./test -name "*.cc")
+TESTS_OBJS = $(addprefix $(TESTS_BUILD_DIR)/,$(notdir $(TESTS_SRCS:%.cc=%.o)))
+TESTS_DEPS = $(TESTS_OBJS:%.o=%.c)
+
+vpath %.cc test/
+$(TESTS_BUILD_DIR)/%.o: %.cc
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+vpath
+
+CALC_COV_BUILD_DIR = build/test
+CALC_COV_SRCS = $(shell find ./models/calculator -name "*.cc")
+CALC_COV_OBJS = $(addprefix $(CALC_COV_BUILD_DIR)/,$(notdir $(CALC_COV_SRCS:%.cc=%.o)))
+CALC_COV_DEPS = $(CALC_COV_OBJS:%.o=%.c)
+
+vpath %.cc models/calculator/
+$(CALC_COV_BUILD_DIR)/%.o: %.cc
+	$(CXX) $(CXXFLAGS) --coverage -c $< -o $@
+
+tests: $(TESTS_OBJS) $(CALC_COV_OBJS)
+	$(CXX) $(CXXFLAGS) $^ -o $@ -lgtest -lgcov
+vpath
+
+main: $(CALC_BUILD_DIR)/libcalculator.a
 
 clean:
-	find -name "*.d" -delete
-	find -name "*.o" -delete
-	find -name "*.a" -delete
-	find -name "*.gcno" -delete
-	find -name "*.gcda" -delete
-	rm -f tests
-	rm -f tests.info
-	rm -rf gcov_report
-
-dvi:
-
-dist:
-
-## Model obj
-$(CALC_BUILD_DIR)/%.o: $(CALC_DIR)/%.cc
-	$(CXX) -MD $(CXXFLAGS) -c $< -o $@
-
-
-## Model static library
-calc-all.a: $(CALC_BUILD_DIR)/calc-all.a
-$(CALC_BUILD_DIR)/calc-all.a: $(CALC_OBJS)
-	ar rcs $@ $^
-
-## Test obj
-$(TEST_BUILD_DIR)/%.o: $(TEST_DIR)/%.cc
-	$(CXX) -MD $(CXXFLAGS) -c $< -o $@
-
-tests: $(TEST_OBJS) calc-all.a
-	$(CXX) $(CXXFLAGS) -Itest/ -Imodels/calculator/ $^ -lgtest -o tests -lgcov
-
-## Build calc
-s21_calc: calc-all.a
-	g++ -g main.c ./view/gtk/calculator.h ./controller/calculator_controller.h ./build/calculator/calc-all.a -fsanitize=address `pkg-config gtkmm-3.0 --cflags --libs`
-
-linter:
-	@cp ../materials/linters/CPPLINT.cfg .
-	@find . -name "*.cc" -exec python3 ../materials/linters/cpplint.py {} \;
-	@find . -name "*.h" -exec python3 ../materials/linters/cpplint.py {} \;
-	@rm -f CPPLINT.cfg
-
-gcov_report: tests
-	./tests
-	lcov --directory . -t "tests" -o tests.info -c --no-external
-	genhtml -o gcov_report tests.info
-	@echo
-	@echo report path is `pwd`/report/index.html
-
-.PHONY: all install uninstall clean dvi dist linter
-
-
-#g++ main.cc -o simple -g -fsanitize=leak `pkg-config gtkmm-3.0 --cflags --libs` ../../build/calculator/calc-all.a -lgcov && ./simple
+	@find -name "*.d" -delete
+	@find -name "*.o" -delete
+	@find -name "*.a" -delete
+	@find -name "*.gcno" -delete
+	@find -name "*.gcda" -delete
+	@rm -f tests
+	@rm -f tests.info
+	@rm -rf gcov_report
