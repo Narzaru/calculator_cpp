@@ -24,7 +24,7 @@
             <property name="can-focus">False</property>
             <property name="spacing">5</property>
             <child>
-              <object class="GtkButton">
+              <object class="GtkButton" id="button_plot">
                 <property name="label" translatable="yes">plot</property>
                 <property name="name">button_plot</property>
                 <property name="visible">True</property>
@@ -75,12 +75,39 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEntry" id="entry">
-            <property name="name">entry</property>
+          <object class="GtkBox">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="max-length">255</property>
-            <signal name="activate" handler="on_evaluate_clicked" swapped="no"/>
+            <property name="can-focus">False</property>
+            <property name="spacing">5</property>
+            <child>
+              <object class="GtkEntry" id="entry">
+                <property name="name">entry</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="max-length">255</property>
+                <property name="placeholder-text" translatable="yes">input math expression</property>
+                <signal name="activate" handler="on_evaluate_clicked" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry">
+                <property name="name">entry_x</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="max-length">64</property>
+                <property name="placeholder-text" translatable="yes">input x</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>

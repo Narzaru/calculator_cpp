@@ -1,22 +1,21 @@
-#ifndef __CALCULATOR_CONTROLLER_H__
-#define __CALCULATOR_CONTROLLER_H__
+#ifndef SRC_CONTROLLER_CALCULATOR_CONTROLLER_H_
+#define SRC_CONTROLLER_CALCULATOR_CONTROLLER_H_
 
 #include <string>
+
 #include "../models/calculator/calculator.h"
 
 namespace s21 {
 class CalcultatorConstroller {
-  public:
-  CalcultatorConstroller(s21::calculator::Calculator &calc) : calculator_(calc){}
-  ~CalcultatorConstroller() = default;
+ public:
+  explicit CalcultatorConstroller(calculator::Calculator *calc);
+  ~CalcultatorConstroller();
 
-  double evaluate(std::string string) const {
-    return calculator_.calculate(string);
-  }
+  double evaluate(std::string string);
 
-  private:
-    s21::calculator::Calculator &calculator_;
+ private:
+  calculator::Calculator *calculator_;
 };
 }  // namespace s21
 
-#endif // __CALCULATOR_CONTROLLER_H__
+#endif  // SRC_CONTROLLER_CALCULATOR_CONTROLLER_H_

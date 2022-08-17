@@ -10,8 +10,7 @@
 #include "syntactical_analyzer.h"
 #include "token.h"
 
-namespace s21 {
-namespace calculator {
+namespace s21::calculator {
 class Calculator {
  public:
   Calculator();
@@ -33,7 +32,6 @@ class Calculator {
   std::list<math::Token> rpn_tokens_;
 };
 
-}  // namespace calculator
-}  // namespace s21
+}  // namespace s21::calculator
 
 #endif  // SRC_MODELS_CALCULATOR_CALCULATOR_H_
