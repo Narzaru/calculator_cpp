@@ -7,7 +7,7 @@ int main(int argc, char **argv) {
   auto application = Gtk::Application::create(argc, argv);
 
   s21::calculator::Calculator calculator_model;
-  s21::CalcultatorConstroller calculator_controller(&calculator_model);
+  s21::CalculatorController calculator_controller(&calculator_model);
   s21::view::MainWindow *calculator_view = s21::view::MainWindow::GetInstance();
   calculator_view->BindController(&calculator_controller);
   int code = application->run(*calculator_view);
