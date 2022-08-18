@@ -21,12 +21,10 @@ Calculator::~Calculator() {
   delete rpn_calculator;
 }
 
-Calculator &Calculator::push_expression(std::string expression) {
+void Calculator::push_expression(std::string expression) {
   expression_ = std::move(expression);
-  return *this;
 }
-
-Calculator &Calculator::compile_expression() {
+void Calculator::compile_expression() {
   std::list<std::string> list_of_lexemes;
   list_of_lexemes = lexical_analyzer->ParseString(expression_);
 
@@ -36,8 +34,6 @@ Calculator &Calculator::compile_expression() {
   list_of_tokens = rpn_former->Create(list_of_tokens);
 
   rpn_tokens_ = list_of_tokens;
-
-  return *this;
 }
 
 double Calculator::calculate() {

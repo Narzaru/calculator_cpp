@@ -11,17 +11,27 @@
 #include "token.h"
 
 namespace s21::calculator {
-class Calculator {
+class ICalculator {
+ public:
+  virtual void push_expression(std::string expression) = 0;
+  virtual void compile_expression() = 0;
+  [[nodiscard]] virtual double calculate() = 0;
+  [[nodiscard]] virtual double calculate(const double *x) = 0;
+  [[nodiscard]] virtual double calculate(const std::string &expression) = 0;
+  [[nodiscard]] virtual double calculate(const std::string &expression, const double *x) = 0;
+};
+
+class Calculator : public ICalculator {
  public:
   Calculator();
   ~Calculator();
-  Calculator &push_expression(std::string expression);
-  Calculator &compile_expression();
-  [[nodiscard]] double calculate();
-  [[nodiscard]] double calculate(const double *x);
+  void push_expression(std::string expression) override;
+  void compile_expression() override;
+  [[nodiscard]] double calculate() override;
+  [[nodiscard]] double calculate(const double *x) override;
 
-  [[nodiscard]] double calculate(const std::string &expression);
-  [[nodiscard]] double calculate(const std::string &expression, const double *x);
+  [[nodiscard]] double calculate(const std::string &expression) override;
+  [[nodiscard]] double calculate(const std::string &expression, const double *x) override;
 
  private:
   math::ILexicalAnalyzer *lexical_analyzer;
