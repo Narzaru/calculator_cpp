@@ -10,8 +10,7 @@
 #include "plotter_window.h"
 #include "sigc++/functors/mem_fun.h"
 
-namespace s21 {
-namespace view {
+namespace s21::view {
 class MainWindow : public Gtk::Window {
  public:
   static MainWindow *GetInstance();
@@ -19,12 +18,12 @@ class MainWindow : public Gtk::Window {
   MainWindow(GtkWindow *c_object, const Glib::RefPtr<Gtk::Builder> &builder);
   ~MainWindow() override;
 
-  void BindController(s21::CalcultatorConstroller *controller);
+  void BindController(s21::CalculatorController *controller);
 
  private:
   const Glib::RefPtr<Gtk::Builder> &builder_;
   Gtk::Entry *entry_;
-  s21::CalcultatorConstroller *controller_;
+  s21::CalculatorController *controller_;
 
   void bind_buttons();
   void show_plotter();
@@ -40,7 +39,6 @@ class MainWindow : public Gtk::Window {
   void del_char_from_entry();
   void evaluate();
 };
-}  // namespace view
-}  // namespace s21
+}  // namespace s21::view
 
 #endif  // SRC_VIEW_GTK_MAIN_WINDOW_H_

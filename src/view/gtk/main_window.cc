@@ -1,4 +1,5 @@
 #include "main_window.h"
+#include <algorithm>
 
 namespace s21::view {
 MainWindow::MainWindow(GtkWindow *c_object,
@@ -9,7 +10,7 @@ MainWindow::MainWindow(GtkWindow *c_object,
 
 MainWindow::~MainWindow() {}
 
-void MainWindow::BindController(s21::CalcultatorConstroller *controller) {
+void MainWindow::BindController(s21::CalculatorController *controller) {
   controller_ = controller;
 }
 
@@ -41,6 +42,7 @@ void MainWindow::bind_buttons() {
   bind_button_to_add_text_entry("button_-", "-");
   bind_button_to_add_text_entry("button_+", "+");
   bind_button_to_add_text_entry("button_.", ".");
+  bind_button_to_add_text_entry("button_e", "e");
   bind_button_to_add_text_entry("button_(", "(");
   bind_button_to_add_text_entry("button_)", ")");
   bind_button_to_add_text_entry("button_sin", "sin");
@@ -63,8 +65,12 @@ void MainWindow::bind_buttons() {
 }
 
 void MainWindow::show_plotter() {
-  Plotter *plotter = new Plotter;
+  PlotterWindow *plotter = new PlotterWindow(controller_);
   plotter->show();
+  plotter->signal_hide().connect([this]() {
+    set_sensitive(true);
+  });
+  set_sensitive(false);
 }
 
 void MainWindow::bind_button_to_show_plotter(const char *glade_id) {
@@ -117,7 +123,9 @@ void MainWindow::clear_entry() {
 }
 
 void MainWindow::del_char_from_entry() {
-  entry_->delete_text(entry_->get_position() - 1, entry_->get_position());
+  int start_position = entry_->get_position() - 1;
+  int end_position = entry_->get_position();
+  entry_->delete_text(start_position, end_position);
 }
 
 void MainWindow::evaluate() {
