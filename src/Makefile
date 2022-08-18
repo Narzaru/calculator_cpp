@@ -10,13 +10,16 @@ ifeq (true, true)
 	endif
 endif
 
+FOLDERS = . ./constroller ./models/calculator ./test ./view/gtk
+INCLUDE_PATHS = $(addprefix -I,$(FOLDERS))
+
 # Libcalculator.a
 CALC_BUILD_DIR = build/calculator
 CALC_SRCS = $(shell find ./models/calculator -name "*.cc")
 CALC_OBJS = $(addprefix $(CALC_BUILD_DIR)/,$(notdir $(CALC_SRCS:%.cc=%.o)))
 
 $(CALC_BUILD_DIR)/%.o: models/calculator/%.cc
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) -O3 $(CXXFLAGS) -c $< -o $@ $(INCLUDE_PATHS)
 
 $(CALC_BUILD_DIR)/libcalculator.a: $(CALC_OBJS)
 	ar rcs $@ $^
@@ -27,17 +30,17 @@ TESTS_SRCS = $(shell find ./test -name "*.cc")
 TESTS_OBJS = $(addprefix $(TESTS_BUILD_DIR)/,$(notdir $(TESTS_SRCS:%.cc=%.o)))
 
 $(TESTS_BUILD_DIR)/%.o: test/%.cc
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCLUDE_PATHS)
 
 CALC_COV_BUILD_DIR = build/test
 CALC_COV_SRCS = $(shell find ./models/calculator -name "*.cc")
 CALC_COV_OBJS = $(addprefix $(CALC_COV_BUILD_DIR)/,$(notdir $(CALC_COV_SRCS:%.cc=%.o)))
 
 $(CALC_COV_BUILD_DIR)/%.o: models/calculator/%.cc
-	$(CXX) $(CXXFLAGS) --coverage -c $< -o $@
+	$(CXX) $(CXXFLAGS) --coverage -c $< -o $@ $(INCLUDE_PATHS)
 
 tests: $(TESTS_OBJS) $(CALC_COV_OBJS)
-	$(CXX) $(CXXFLAGS) $^ -o $@ -lgtest -lgcov
+	$(CXX) $(CXXFLAGS) $^ -o $@ -lgtest -lgcov $(INCLUDE_PATHS)
 
 # Views
 VIEW_BUILD_DIR = build/view
@@ -45,7 +48,7 @@ VIEW_SRCS = $(shell find ./view/gtk -name "*.cc")
 VIEW_OBJS = $(addprefix $(VIEW_BUILD_DIR)/,$(notdir $(VIEW_SRCS:%.cc=%.o)))
 
 $(VIEW_BUILD_DIR)/%.o: view/gtk/%.cc
-	$(CXX) $(CXXFLAGS) -c $< -o $@ `pkg-config gtkmm-3.0 --libs --cflags`
+	$(CXX) $(CXXFLAGS) -c $< -o $@ `pkg-config gtkmm-3.0 --libs --cflags` $(INCLUDE_PATHS)
 
 # Controllers
 CNTRL_BUILD_DIR = build/controller
@@ -53,14 +56,14 @@ CNTRL_SRCS = $(shell find ./controller -name "*.cc")
 CNTRL_OBJS = $(addprefix $(CNTRL_BUILD_DIR)/,$(notdir $(CNTRL_SRCS:%.cc=%.o)))
 
 $(CNTRL_BUILD_DIR)/%.o: controller/%.cc
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCLUDE_PATHS)
 
 # Calculator
 build/main.o: main.cc
-	$(CXX) $(CXXFLAGS) -c $< -o $@ `pkg-config gtkmm-3.0 --libs --cflags`
+	$(CXX) $(CXXFLAGS) -c $< -o $@ `pkg-config gtkmm-3.0 --libs --cflags` $(INCLUDE_PATHS)
 
 calculator: build/main.o $(VIEW_OBJS) $(CNTRL_OBJS) $(CALC_BUILD_DIR)/libcalculator.a
-	$(CXX) $(CXXFLAGS) $^ -o $@ `pkg-config gtkmm-3.0 --libs --cflags`
+	$(CXX) $(CXXFLAGS) $^ -o $@ `pkg-config gtkmm-3.0 --libs --cflags` $(INCLUDE_PATHS)
 
 # Gcov report
 gcov_report: tests
