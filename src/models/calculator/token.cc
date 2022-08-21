@@ -4,24 +4,66 @@
 
 namespace s21::math {
 
-Token::Token(TokenName token_name, Token::string lexeme)
-    : name_(token_name), value_(std::move(lexeme)) {}
-
-bool Token::operator==(const Token &other) const {
+bool MathToken::operator==(const MathToken &other) const {
   return other.name_ == name_ && other.value_ == value_;
 }
 
-bool Token::operator==(const TokenName &name) const {
-  return name_ == name;
+bool MathToken::operator==(const Name &name) const { return name_ == name; }
+
+bool MathToken::operator!=(const Name &name) const { return !(*this == name); }
+
+bool MathToken::operator==(const std::string &value) const {
+  return value_ == value;
 }
 
-bool Token::operator!=(const TokenName &name) const {
-  return !(*this == name);
+bool MathToken::operator!=(const std::string &value) const {
+  return !(*this == value);
 }
 
-Token &Token::Rename(TokenName name) {
-  name_ = name;
-  return *this;
+bool MathToken::IsNumber() const {
+  return name_ == Name::kVariable || name_ == Name::kNumber;
 }
 
-}  // namespace s21::math
+bool MathToken::IsOperator() const {
+  return name_ == Name::kOperator || name_ == Name::kUnaryOperator;
+}
+
+bool MathToken::IsOpenBracket() const { return name_ == Name::kOpenBracket; }
+
+bool MathToken::IsCloseBracket() const { return name_ == Name::kCloseBracket; }
+
+bool MathToken::IsFunction() const { return name_ == Name::kInfixFunction; }
+
+bool MathToken::IsRightAssociative() const {
+  return name_ == Name::kUnaryOperator || value_ == "pow" || value_ == "^";
+}
+
+bool MathToken::IsLeftAssociative() const { return !IsRightAssociative(); }
+
+int MathToken::Priority() const {
+  int priority = 0;
+
+  if (name_ != Name::kUnaryOperator && (value_ == "+" || value_ == "-")) {
+    priority = 1;
+  } else if (value_ == "*" || value_ == "/") {
+    priority = 2;
+  } else if (value_ == "mod" || value_ == "%") {
+    priority = 2;
+  } else if (value_ == "^" || value_ == "pow") {
+    priority = 3;
+  } else if (name_ == Name::kUnaryOperator &&
+             (value_ == "+" || value_ == "-")) {
+    priority = 4;
+  } else if (name_ == Name::kInfixFunction) {
+    priority = 5;
+  } else {
+    priority = 0;
+  }
+  return priority;
+}
+
+bool MathToken::IsWrong() const {
+  return name_ == Name::kUnknown || name_ == Name::kEmpty;
+}
+
+} // namespace s21::math
