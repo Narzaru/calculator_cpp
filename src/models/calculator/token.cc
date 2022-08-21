@@ -49,15 +49,12 @@ int MathToken::Priority() const {
     priority = 2;
   } else if (value_ == "mod" || value_ == "%") {
     priority = 2;
-  } else if (value_ == "^" || value_ == "pow") {
+  } else if (value_ == "^" || value_ == "pow" || name_ == Name::kUnaryOperator) {
     priority = 3;
-  } else if (name_ == Name::kUnaryOperator &&
-             (value_ == "+" || value_ == "-")) {
-    priority = 4;
   } else if (name_ == Name::kInfixFunction) {
-    priority = 5;
+    priority = -1;
   } else {
-    priority = 0;
+    priority = -1;
   }
   return priority;
 }
