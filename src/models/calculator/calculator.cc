@@ -24,6 +24,7 @@ Calculator::~Calculator() {
 void Calculator::push_expression(std::string expression) {
   expression_ = std::move(expression);
 }
+
 void Calculator::compile_expression() {
   std::list<std::string> list_of_lexemes;
   list_of_lexemes = lexical_analyzer->ParseString(expression_);
@@ -36,9 +37,7 @@ void Calculator::compile_expression() {
   rpn_tokens_ = list_of_tokens;
 }
 
-double Calculator::calculate() {
-  return this->calculate(nullptr);
-}
+double Calculator::calculate() { return this->calculate(nullptr); }
 
 double Calculator::calculate(const double *x) {
   return rpn_calculator->Calculate(rpn_tokens_, x);
@@ -59,4 +58,4 @@ double Calculator::calculate(const std::string &expression, const double *x) {
 
   return rpn_calculator->Calculate(list_of_tokens, x);
 }
-}  // namespace s21::calculator
+} // namespace s21::calculator
