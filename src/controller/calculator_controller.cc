@@ -8,8 +8,15 @@ CalculatorController::~CalculatorController() = default;
 
 double CalculatorController::evaluate(const std::string &string,
                                       const std::string &x) {
+  double num_x = 0.0;
+
   try {
-    double num_x = std::stod(x);
+    num_x = std::stod(x);
+  } catch (...) {
+    num_x = std::numeric_limits<double>::quiet_NaN();
+  }
+
+  try {
     return calculator_->calculate(string, &num_x);
   } catch (...) {
     return std::numeric_limits<double>::quiet_NaN();
