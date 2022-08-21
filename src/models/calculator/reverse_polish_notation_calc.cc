@@ -21,15 +21,13 @@ double ReversePolishNotationCalculator::Calculate(
   std::stack<MathToken> stack;
 
   for (const auto &item : postfix_tokens) {
-    if (item.IsNumber()) {
-      if (item == Name::kVariable) {
-        if (x != nullptr) {
-          stack.emplace(Name::kNumber, std::to_string(*x));
-        } else {
-          throw ReversePolishNotationCalcExceptions("x is not set");
-        }
+    if (item == Name::kNumber) {
+      stack.emplace(item.GetName(), item.GetValue());
+    } else if (item == Name::kVariable) {
+      if (x != nullptr) {
+        stack.emplace(Name::kNumber, std::to_string(*x));
       } else {
-        stack.emplace(item.GetName(), item.GetValue());
+        throw ReversePolishNotationCalcExceptions("x is not set");
       }
     } else if (item.IsOperator() || item.IsFunction()) {
       stack.push(Calc(&stack, item));
