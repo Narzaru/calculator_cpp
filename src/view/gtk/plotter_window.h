@@ -1,60 +1,80 @@
 #ifndef SRC_VIEW_GTK_PLOTTER_WINDOW_H_
 #define SRC_VIEW_GTK_PLOTTER_WINDOW_H_
 
+#include "../controller/calculator_controller.h"
+#include "function_properties.h"
+#include <gtkmm/box.h>
+#include <gtkmm/button.h>
+#include <gtkmm/drawingarea.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/grid.h>
-#include <gtkmm/drawingarea.h>
+#include <gtkmm/layout.h>
 #include <gtkmm/window.h>
-#include <gtkmm/box.h>
-#include "../controller/calculator_controller.h"
-#include "../controller/axis.h"
 
 namespace s21::view {
 
-class Area : public Gtk::DrawingArea {
- public:
-  Area();
-  ~Area() override;
-  void DrawGraph2D(const s21::UniformlyDiscreteFunction &function,
-                   const Glib::ustring &x_min,
-                   const Glib::ustring &x_max,
-                   const Glib::ustring &y_min,
-                   const Glib::ustring &y_max);
+class PlotterArea : public Gtk::Layout {
+public:
+  PlotterArea();
+  ~PlotterArea() override = default;
 
- private:
-  s21::UniformlyDiscreteFunction function_;
-  Glib::ustring x_min_;
-  Glib::ustring x_max_;
-  Glib::ustring y_min_;
-  Glib::ustring y_max_;
-  bool need_draw;
+  void DrawGraph2D(const UDFunction &function,
+                   const GraphProperties &properties);
 
- protected:
-  bool on_draw(const Cairo::RefPtr<Cairo::Context> &cr) override;
+private:
+  s21::UDFunction function_{};
+  GraphProperties properties_{};
+
+  double box_left_{};
+  double box_right_{};
+  double box_top_{};
+  double box_bot_{};
+
+  double x_min_{};
+  double x_max_{};
+  double y_min_{};
+  double y_max_{};
+
+  double x_stretching_k_{};
+  double y_stretching_k_{};
+
+  double x_start_{};
+  double y_start_{};
+
+
+  bool DrawCall(const Cairo::RefPtr<Cairo::Context> &cr);
+  void draw_background(const Cairo::RefPtr<Cairo::Context> &cr);
+  void draw_graph(const Cairo::RefPtr<Cairo::Context> &cr);
+  void draw_box(const Cairo::RefPtr<Cairo::Context> &cr);
+  void draw_labels(const Cairo::RefPtr<Cairo::Context> &cr);
 };
 
 class PlotterWindow : public Gtk::Window {
- public:
+public:
   explicit PlotterWindow(s21::CalculatorController *controller);
-  ~PlotterWindow() override;
+  ~PlotterWindow() override = default;
 
- private:
+private:
   s21::CalculatorController *controller_;
 
+  Gtk::Box window_box_;
+
+  Gtk::Box entry_box_;
   Gtk::Entry math_expression_entry_;
 
-  Gtk::Entry x_min_;
-  Gtk::Entry x_max_;
-  Gtk::Entry y_min_;
-  Gtk::Entry y_max_;
-
-  Gtk::Box window_box_;
+  Gtk::Button draw_button_;
   Gtk::Grid axis_entry_grid_;
-  Area draw_area_;
+  Gtk::Entry x_min_entry_;
+  Gtk::Entry x_max_entry_;
+  Gtk::Entry y_min_entry_;
+  Gtk::Entry y_max_entry_;
 
-  void Evaluate();
+  PlotterArea draw_area_;
+
+  bool PlotterKeyHandler(GdkEventKey *event);
+  void Plot();
 };
 
-}  // namespace s21::view
+} // namespace s21::view
 
-#endif  // SRC_VIEW_GTK_PLOTTER_WINDOW_H_
+#endif // SRC_VIEW_GTK_PLOTTER_WINDOW_H_
