@@ -1,28 +1,28 @@
 #ifndef SRC_CONTROLLER_CALCULATOR_CONTROLLER_H_
 #define SRC_CONTROLLER_CALCULATOR_CONTROLLER_H_
 
-#include <string>
+#include "../models/calculator/calculator.h"
+#include "../view/gtk/function_properties.h"
 #include "function.h"
 
-#include "../models/calculator/calculator.h"
+#include <string>
 
 namespace s21 {
 class CalculatorController {
- public:
+public:
   explicit CalculatorController(calculator::Calculator *calc);
   ~CalculatorController();
 
   double evaluate(const std::string &string);
-  s21::UniformlyDiscreteFunction GetFunction(const std::string &expression,
-                                             const std::string &x_min,
-                                             const std::string &x_max,
-                                             const std::string &y_min,
-                                             const std::string &y_max,
-                                             int dots_count);
+  double evaluate(const std::string &string, const std::string &x);
 
- private:
+  s21::UDFunction GetFunction(const std::string &expression,
+                              const view::GraphProperties &prop,
+                              int dots_count);
+
+private:
   calculator::Calculator *calculator_;
 };
-}  // namespace s21
+} // namespace s21
 
-#endif  // SRC_CONTROLLER_CALCULATOR_CONTROLLER_H_
+#endif // SRC_CONTROLLER_CALCULATOR_CONTROLLER_H_

@@ -6,25 +6,35 @@ CalculatorController::CalculatorController(calculator::Calculator *calc)
 
 CalculatorController::~CalculatorController() = default;
 
-double CalculatorController::evaluate(const std::string &string) {
-  return calculator_->calculate(string);
-}
-s21::UniformlyDiscreteFunction CalculatorController::GetFunction(const std::string &expression,
-                                                                 const std::string &sx_min,
-                                                                 const std::string &sx_max,
-                                                                 const std::string &sy_min,
-                                                                 const std::string &sy_max,
-                                                                 int dots_count) {
-  double x_min = std::stod(sx_min);
-  double x_max = std::stod(sx_max);
-  double y_min = std::stod(sy_min);
-  double y_max = std::stod(sy_max);
-  s21::UniformlyDiscreteFunction ret_function(dots_count, x_min, x_max);
-  ret_function.CalculateYValues(expression, calculator_);
-  ret_function.SetDomain(y_min, y_max);
-  return ret_function;
+double CalculatorController::evaluate(const std::string &string,
+                                      const std::string &x) {
+  try {
+    double num_x = std::stod(x);
+    return calculator_->calculate(string, &num_x);
+  } catch (...) {
+    return std::numeric_limits<double>::quiet_NaN();
+  }
 }
 
+s21::UDFunction
+CalculatorController::GetFunction(const std::string &expression,
+                                  const view::GraphProperties &prop,
+                                  int dots_count) {
 
+  s21::UDFunction ret_function(dots_count, prop.x_min(), prop.x_max());
 
-}  // namespace s21
+  try {
+    calculator_->push_expression(expression);
+    calculator_->compile_expression();
+    for (int i = 0; i < dots_count; ++i) {
+      ret_function.Y(i) = calculator_->calculate(&ret_function.X(i));
+    }
+    ret_function.SetDomain(prop.y_min(), prop.y_max());
+
+    return ret_function;
+  } catch (...) {
+    return {};
+  }
+}
+
+} // namespace s21
