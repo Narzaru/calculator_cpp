@@ -25,10 +25,9 @@ ReversePolishNotationFormer::Create(const std::list<MathToken> &tokens) {
       stack.push(token);
     } else if (token.IsOperator()) {
       while (!stack.empty() && stack.top().IsOperator() &&
-             ((token.IsLeftAssociative() &&
-               stack.top().Priority() >= token.Priority()) ||
-              (token.IsRightAssociative() &&
-               stack.top().Priority() == token.Priority()))) {
+             ((stack.top().Priority() > token.Priority()) ||
+              (token.IsLeftAssociative() &&
+               (token.Priority() == stack.top().Priority())))) {
         out_tokens.push_back(std::move(stack.top()));
         stack.pop();
       }
