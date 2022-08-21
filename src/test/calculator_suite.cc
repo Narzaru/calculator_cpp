@@ -74,3 +74,13 @@ TEST(suite, test_9) {
   ASSERT_FLOAT_EQ(-1e+6, calculator.calculate("-1e+6"));
   ASSERT_FLOAT_EQ(-5.55e+8, calculator.calculate("-5.55e+8"));
 }
+
+TEST(suite, test_10) {
+  s21::calculator::Calculator calculator;
+  ASSERT_FLOAT_EQ(2.4178516e+24, calculator.calculate("2^3^4"));
+}
+
+TEST(suite, test_11) {
+  s21::calculator::Calculator calculator;
+  ASSERT_FLOAT_EQ(0, calculator.calculate("2^-3^4"));
+}
