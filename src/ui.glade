@@ -95,7 +95,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry">
+              <object class="GtkEntry" id="entry_x">
                 <property name="name">entry_x</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
