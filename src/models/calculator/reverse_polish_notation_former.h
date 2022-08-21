@@ -6,7 +6,6 @@
 #include "calculator_base_exceptions.h"
 #include "token.h"
 #include "lexeme_analyzer.h"
-#include "operator_analyzer.h"
 
 namespace s21::math {
 
@@ -32,15 +31,15 @@ class ReversePolishNotationFormerException : public s21::exception::IMyBaseExcep
 
 class IReversePolishNotationFormer {
  public:
-  virtual std::list<Token> Create(const std::list<Token> &tokens) = 0;
+  virtual std::list<MathToken> Create(const std::list<MathToken> &tokens) = 0;
   virtual ~IReversePolishNotationFormer() = default;
 };
 
-class ReversePolishNotationFormer final : public IReversePolishNotationFormer, public OperatorAnalyzer {
+class ReversePolishNotationFormer final : public IReversePolishNotationFormer {
  public:
-  std::list<Token> Create(const std::list<Token> &tokens) override;
+  std::list<MathToken> Create(const std::list<MathToken> &tokens) override;
  private:
-  bool IsValidTokens(const std::list<Token> &tokens);
+  bool IsValidTokens(const std::list<MathToken> &tokens);
 };
 
 }  // namespace s21::math

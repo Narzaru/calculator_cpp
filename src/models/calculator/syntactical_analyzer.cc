@@ -6,40 +6,40 @@
 
 namespace s21::math {
 
-TokenName SyntacticalAnalyzer::GetTokenName(const std::string &lexeme) {
+Name SyntacticalAnalyzer::GetTokenName(const std::string &lexeme) {
   if (IsNumber(lexeme)) {
-    return TokenName::kNumber;
+    return Name::kNumber;
   } else if (IsOpenBracket(lexeme)) {
-    return TokenName::kOpenBracket;
+    return Name::kOpenBracket;
   } else if (IsFunction(lexeme)) {
-    return TokenName::kFunction;
+    return Name::kInfixFunction;
   } else if (IsOperator(lexeme)) {
-    return TokenName::kOperator;
+    return Name::kOperator;
   } else if (IsCloseBracket(lexeme)) {
-    return TokenName::kCloseBracket;
+    return Name::kCloseBracket;
   } else if (IsVariable(lexeme)) {
-    return TokenName::kVariable;
+    return Name::kVariable;
   }
-  return TokenName::kWrong;
+  return Name::kUnknown;
 }
 
-std::list<Token> SyntacticalAnalyzer::Compile(
+std::list<MathToken> SyntacticalAnalyzer::Compile(
     const std::list<std::string> &lexemes) {
-  std::list<Token> out_list;
+  std::list<MathToken> out_list;
 
   // parses the token into token names
   for (const std::string &lexeme : lexemes) {
     out_list.emplace_back(GetTokenName(lexeme), lexeme);
   }
 
-  // additionaly parses operators + and - into unary
-  TokenName prew_name = TokenName::kOperator;
-  for (Token &token : out_list) {
-    if (prew_name == TokenName::kOperator || prew_name == TokenName::kUnary ||
-        prew_name == TokenName::kOpenBracket) {
+  // additionally parses operators + and - into unary
+  Name prew_name = Name::kOperator;
+  for (MathToken &token : out_list) {
+    if (prew_name == Name::kOperator || prew_name == Name::kUnaryOperator ||
+        prew_name == Name::kOpenBracket) {
       if (token.GetValue() == "+" || token.GetValue() == "-") {
-        if (token == TokenName::kOperator || token == TokenName::kOpenBracket) {
-          token.Rename(TokenName::kUnary);
+        if (token == Name::kOperator || token == Name::kOpenBracket) {
+          token.Rename(Name::kUnaryOperator);
         }
       }
     }

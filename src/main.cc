@@ -9,7 +9,7 @@ int main(int argc, char **argv) {
   s21::calculator::Calculator calculator_model;
   s21::CalculatorController calculator_controller(&calculator_model);
   s21::view::MainWindow *calculator_view = s21::view::MainWindow::GetInstance();
-  calculator_view->BindController(&calculator_controller);
+  calculator_view->BindCalculatorController(&calculator_controller);
   int code = application->run(*calculator_view);
   calculator_view->close();
   delete calculator_view;

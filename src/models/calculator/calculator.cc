@@ -29,7 +29,7 @@ void Calculator::compile_expression() {
   std::list<std::string> list_of_lexemes;
   list_of_lexemes = lexical_analyzer->ParseString(expression_);
 
-  std::list<s21::math::Token> list_of_tokens;
+  std::list<s21::math::MathToken> list_of_tokens;
   list_of_tokens = syntactical_analyzer->Compile(list_of_lexemes);
 
   list_of_tokens = rpn_former->Create(list_of_tokens);
@@ -51,7 +51,7 @@ double Calculator::calculate(const std::string &expression, const double *x) {
   std::list<std::string> list_of_lexemes;
   list_of_lexemes = lexical_analyzer->ParseString(expression);
 
-  std::list<s21::math::Token> list_of_tokens;
+  std::list<s21::math::MathToken> list_of_tokens;
   list_of_tokens = syntactical_analyzer->Compile(list_of_lexemes);
 
   list_of_tokens = rpn_former->Create(list_of_tokens);

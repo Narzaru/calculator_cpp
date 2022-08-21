@@ -8,9 +8,9 @@ MainWindow::MainWindow(GtkWindow *c_object,
   bind_buttons();
 }
 
-MainWindow::~MainWindow() {}
+MainWindow::~MainWindow() = default;
 
-void MainWindow::BindController(s21::CalculatorController *controller) {
+void MainWindow::BindCalculatorController(CalculatorController *controller) {
   controller_ = controller;
 }
 
@@ -24,6 +24,7 @@ MainWindow *MainWindow::GetInstance() {
 
 void MainWindow::bind_buttons() {
   builder_->get_widget("entry", entry_);
+  builder_->get_widget("entry_x", entry_x_);
 
   bind_button_to_add_text_entry("button_1", "1");
   bind_button_to_add_text_entry("button_2", "2");
@@ -62,22 +63,23 @@ void MainWindow::bind_buttons() {
   bind_button_to_evaluate("button_=");
 
   bind_button_to_show_plotter("button_plot");
+
+  entry_->signal_activate().connect(
+      sigc::mem_fun(*this, &MainWindow::evaluate));
 }
 
-void MainWindow::show_plotter() {
+void MainWindow::SwitchToPlotter() {
   PlotterWindow *plotter = new PlotterWindow(controller_);
   plotter->show();
-  plotter->signal_hide().connect([this]() {
-    set_sensitive(true);
-  });
-  set_sensitive(false);
+  //  plotter->signal_hide().connect([this]() { set_sensitive(true); });
+  //  set_sensitive(false);
 }
 
 void MainWindow::bind_button_to_show_plotter(const char *glade_id) {
   Gtk::Button *temp_button_ref;
   builder_->get_widget(glade_id, temp_button_ref);
   temp_button_ref->signal_clicked().connect(
-      sigc::mem_fun(*this, &MainWindow::show_plotter));
+      sigc::mem_fun(*this, &MainWindow::SwitchToPlotter));
 }
 
 void MainWindow::bind_button_to_add_text_entry(const char *glade_id,
@@ -114,12 +116,15 @@ void MainWindow::add_text_to_entry(const char *text) {
   string.insert(entry_->get_position(), text);
   entry_->set_text(string);
   int size = 0;
-  while (string[size] != '\0') size++;
+  while (string[size] != '\0') {
+    size++;
+  }
   entry_->set_position(entry_->get_position() + size);
 }
 
 void MainWindow::clear_entry() {
   entry_->delete_text(0, -1);
+  entry_x_->delete_text(0, -1);
 }
 
 void MainWindow::del_char_from_entry() {
@@ -129,7 +134,8 @@ void MainWindow::del_char_from_entry() {
 }
 
 void MainWindow::evaluate() {
-  double result = controller_->evaluate(entry_->get_text());
+  double result =
+      controller_->evaluate(entry_->get_text(), entry_x_->get_text());
   clear_entry();
   std::string str_result = std::to_string(result);
   str_result.erase(str_result.find_last_not_of('0') + 1, std::string::npos);
@@ -137,4 +143,4 @@ void MainWindow::evaluate() {
   add_text_to_entry(str_result.c_str());
 }
 
-}  // namespace s21::view
+} // namespace s21::view

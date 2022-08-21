@@ -7,34 +7,36 @@
 #include "token.h"
 
 namespace s21::math {
-std::list<Token> ReversePolishNotationFormer::Create(const std::list<Token> &tokens) {
+std::list<MathToken>
+ReversePolishNotationFormer::Create(const std::list<MathToken> &tokens) {
   if (!IsValidTokens(tokens)) {
-    throw ReversePolishNotationFormerException("list of tokens contains a wrong or empty token");
+    throw ReversePolishNotationFormerException(
+        "list of tokens contains a wrong or empty token");
   }
 
   [[maybe_unused]] bool error_occurred = false;
-  std::list<Token> out_tokens;
-  std::stack<Token> stack;
+  std::list<MathToken> out_tokens;
+  std::stack<MathToken> stack;
 
-  for (const Token &token : tokens) {
-    if (token == TokenName::kNumber || token == TokenName::kVariable) {
+  for (const MathToken &token : tokens) {
+    if (token.IsNumber()) {
       out_tokens.push_back(token);
-    } else if (token == TokenName::kFunction) {
+    } else if (token.IsFunction()) {
       stack.push(token);
-    } else if (token == TokenName::kOperator || token == TokenName::kUnary) {
-      while (!stack.empty() && (stack.top() == TokenName::kOperator || stack.top() == TokenName::kUnary) &&
-          ((IsLeftAssociative(token) &&
-              (Priority(stack.top()) >= Priority(token))) ||
-              (IsRightAssociative(token) &&
-                  Priority(stack.top()) > Priority(token)))) {
+    } else if (token.IsOperator()) {
+      while (!stack.empty() && stack.top().IsOperator() &&
+             ((token.IsLeftAssociative() &&
+               stack.top().Priority() >= token.Priority()) ||
+              (token.IsRightAssociative() &&
+               stack.top().Priority() == token.Priority()))) {
         out_tokens.push_back(std::move(stack.top()));
         stack.pop();
       }
       stack.push(token);
-    } else if (token == TokenName::kOpenBracket) {
+    } else if (token.IsOpenBracket()) {
       stack.push(token);
-    } else if (token == TokenName::kCloseBracket) {
-      while (!stack.empty() && (stack.top() != TokenName::kOpenBracket)) {
+    } else if (token.IsCloseBracket()) {
+      while (!stack.empty() && !stack.top().IsOpenBracket()) {
         out_tokens.push_back(std::move(stack.top()));
         stack.pop();
       }
@@ -43,7 +45,7 @@ std::list<Token> ReversePolishNotationFormer::Create(const std::list<Token> &tok
       } else {
         stack.pop();
       }
-      if (!stack.empty() && (stack.top() == TokenName::kFunction)) {
+      if (!stack.empty() && (stack.top().IsFunction())) {
         out_tokens.push_back(std::move(stack.top()));
         stack.pop();
       }
@@ -52,7 +54,7 @@ std::list<Token> ReversePolishNotationFormer::Create(const std::list<Token> &tok
     }
   }
 
-  while (!stack.empty() && (stack.top() == TokenName::kOperator || stack.top() == TokenName::kUnary)) {
+  while (!stack.empty() && (stack.top().IsOperator())) {
     out_tokens.push_back(std::move(stack.top()));
     stack.pop();
   }
@@ -68,13 +70,14 @@ std::list<Token> ReversePolishNotationFormer::Create(const std::list<Token> &tok
   return out_tokens;
 }
 
-bool ReversePolishNotationFormer::IsValidTokens(const std::list<Token> &tokens) {
+bool ReversePolishNotationFormer::IsValidTokens(
+    const std::list<MathToken> &tokens) {
   for (const auto &token : tokens) {
-    if (token == TokenName::kWrong || token == TokenName::kEmpty) {
+    if (token.IsWrong()) {
       return false;
     }
   }
   return true;
 }
 
-}  // namespace s21::math
+} // namespace s21::math

@@ -18,15 +18,16 @@ class MainWindow : public Gtk::Window {
   MainWindow(GtkWindow *c_object, const Glib::RefPtr<Gtk::Builder> &builder);
   ~MainWindow() override;
 
-  void BindController(s21::CalculatorController *controller);
+  void BindCalculatorController(CalculatorController *controller);
 
  private:
   const Glib::RefPtr<Gtk::Builder> &builder_;
   Gtk::Entry *entry_;
+  Gtk::Entry *entry_x_;
   s21::CalculatorController *controller_;
 
   void bind_buttons();
-  void show_plotter();
+  void SwitchToPlotter();
 
   void bind_button_to_show_plotter(const char *glade_id);
   void bind_button_to_add_text_entry(const char *glade_id, const char *text);

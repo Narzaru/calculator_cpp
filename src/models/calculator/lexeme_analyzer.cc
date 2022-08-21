@@ -17,57 +17,59 @@ bool LexemeAnalyzer::IsNumber(const std::string &lexeme) const {
   int state = 0;
   for (const char &chr : lexeme) {
     switch (state) {
-      case 0:
-        if (IsDigit(chr)) {
-          state = 1;
-        } else {
-          state = 6;
-        }
-        break;
-      case 1:
-        if (IsDigit(chr)) {
-          state = 1;
-        } else if (chr == '.') {
-          state = 2;
-        } else if (chr == 'e' || chr == 'E') {
-          state = 3;
-        } else {
-          state = 6;
-        }
-        break;
-      case 2:
-        if (IsDigit(chr)) {
-          state = 2;
-        } else if (chr == 'e' || chr == 'E') {
-          state = 3;
-        }
-        break;
-      case 3:
-        if (IsDigit(chr)) {
-          state = 5;
-        } else if (chr == '+' || chr == '-') {
-          state = 4;
-        } else {
-          state = 6;
-        }
-        break;
-      case 4:
-        if (IsDigit(chr)) {
-          state = 5;
-        } else {
-          state = 6;
-        }
-        break;
-      case 5:
-        if (IsDigit(chr)) {
-          state = 5;
-        } else {
-          state = 6;
-        }
-        break;
-      default:break;
+    case 0:
+      if (IsDigit(chr)) {
+        state = 1;
+      } else {
+        state = 6;
+      }
+      break;
+    case 1:
+      if (IsDigit(chr)) {
+        state = 1;
+      } else if (chr == '.') {
+        state = 2;
+      } else if (chr == 'e' || chr == 'E') {
+        state = 3;
+      } else {
+        state = 6;
+      }
+      break;
+    case 2:
+      if (IsDigit(chr)) {
+        state = 2;
+      } else if (chr == 'e' || chr == 'E') {
+        state = 3;
+      }
+      break;
+    case 3:
+      if (IsDigit(chr)) {
+        state = 5;
+      } else if (chr == '+' || chr == '-') {
+        state = 4;
+      } else {
+        state = 6;
+      }
+      break;
+    case 4:
+      if (IsDigit(chr)) {
+        state = 5;
+      } else {
+        state = 6;
+      }
+      break;
+    case 5:
+      if (IsDigit(chr)) {
+        state = 5;
+      } else {
+        state = 6;
+      }
+      break;
+    default:
+      break;
     }
   }
+  // success states 1 2 5
   return state == 1 || state == 2 || state == 5;
 }
 
@@ -112,4 +114,4 @@ bool LexemeAnalyzer::IsVariable(const std::string &lexeme) const {
   return false;
 }
 
-}  // namespace s21::math
+} // namespace s21::math

@@ -37,7 +37,7 @@ CALC_COV_SRCS = $(shell find ./models/calculator -name "*.cc")
 CALC_COV_OBJS = $(addprefix $(CALC_COV_BUILD_DIR)/,$(notdir $(CALC_COV_SRCS:%.cc=%.o)))
 
 $(CALC_COV_BUILD_DIR)/%.o: models/calculator/%.cc
-	$(CXX) $(CXXFLAGS) --coverage -c $< -o $@ $(INCLUDE_PATHS)
+	$(CXX) -O3 $(CXXFLAGS) --coverage -c $< -o $@ $(INCLUDE_PATHS)
 
 tests: $(TESTS_OBJS) $(CALC_COV_OBJS)
 	$(CXX) $(CXXFLAGS) $^ -o $@ -lgtest -lgcov $(INCLUDE_PATHS)

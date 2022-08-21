@@ -1,17 +1,17 @@
 #ifndef SRC_CONTROLLER_FUNCTION_H_
 #define SRC_CONTROLLER_FUNCTION_H_
 
-#include <vector>
 #include "calculator.h"
 #include <limits>
+#include <vector>
 
 namespace s21 {
 
-class UDFunction {
+class UDFunction final {
   using ICalculator = s21::calculator::ICalculator;
   using double_limits = std::numeric_limits<double>;
 
- public:
+public:
   UDFunction();
   explicit UDFunction(int number_of_dots);
   UDFunction(int number_of_dots, double x_begin, double x_end);
@@ -20,21 +20,23 @@ class UDFunction {
 
   UDFunction &operator=(const UDFunction &other);
 
-  void CalculateYValues(const std::string &expression, ICalculator *calculator);
   void SetDomain(double y_min, double y_max);
 
-  [[nodiscard]] const double &X(int i);
-  [[nodiscard]] const double &Y(int i);
+  [[nodiscard]] double &X(int i);
+  [[nodiscard]] double &Y(int i);
+  [[nodiscard]] const double &X(int i) const;
+  [[nodiscard]] const double &Y(int i) const;
+
   [[nodiscard]] const int &Length() const;
 
- private:
+  static bool IsNumber(const double &number);
+
+private:
   int number_of_dots_;
+
   double *x_values_;
   double *y_values_;
-
- protected:
-  static bool is_number(const double &number);
 };
-}  // namespace s21
+} // namespace s21
 
-#endif //SRC_CONTROLLER_FUNCTION_H_
+#endif // SRC_CONTROLLER_FUNCTION_H_

@@ -44,7 +44,7 @@ private:
   math::IReversePolishNotationFormer *rpn_former;
   math::IReversePolishNotationCalculator *rpn_calculator;
   std::string expression_;
-  std::list<math::Token> rpn_tokens_;
+  std::list<math::MathToken> rpn_tokens_;
 };
 
 } // namespace s21::calculator
