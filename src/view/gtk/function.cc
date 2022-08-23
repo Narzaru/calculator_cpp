@@ -1,9 +1,10 @@
 #include <cmath>
 #include <stdexcept>
+#include <limits>
 
 #include "function.h"
 
-namespace s21 {
+namespace s21::view {
 
 UDFunction::UDFunction()
     : number_of_dots_(0), x_values_(nullptr), y_values_(nullptr) {}
@@ -50,15 +51,21 @@ UDFunction &UDFunction::operator=(const UDFunction &other) {
     return *this;
 
   number_of_dots_ = other.number_of_dots_;
+
   delete[] x_values_;
   delete[] y_values_;
 
-  x_values_ = new double[number_of_dots_];
-  y_values_ = new double[number_of_dots_];
+  if (number_of_dots_ == 0) {
+    x_values_ = nullptr;
+    y_values_ = nullptr;
+  } else {
+    x_values_ = new double[number_of_dots_];
+    y_values_ = new double[number_of_dots_];
 
-  for (int i = 0; i < number_of_dots_; ++i) {
-    x_values_[i] = other.x_values_[i];
-    y_values_[i] = other.y_values_[i];
+    for (int i = 0; i < number_of_dots_; ++i) {
+      x_values_[i] = other.x_values_[i];
+      y_values_[i] = other.y_values_[i];
+    }
   }
 
   return *this;
@@ -75,7 +82,7 @@ UDFunction::UDFunction(const UDFunction &other)
 void UDFunction::SetDomain(double y_min, double y_max) {
   for (int i = 0; i < number_of_dots_; ++i) {
     if (y_values_[i] > y_max || y_values_[i] < y_min) {
-      y_values_[i] = double_limits::quiet_NaN();
+      y_values_[i] = std::numeric_limits<double>::quiet_NaN();
     }
   }
 }
@@ -94,4 +101,4 @@ bool UDFunction::IsNumber(const double &number) {
   return !std::isnan(number) && !std::isinf(number);
 }
 
-} // namespace s21
+}  // namespace s21::view
