@@ -12,7 +12,8 @@
 #include "token.h"
 
 namespace s21::math {
-double ReversePolishNotationCalculator::Calculate(const std::list<MathToken> &postfix_tokens) const {
+double ReversePolishNotationCalculator::Calculate(
+    const std::list<MathToken> &postfix_tokens) const {
   return Calculate(postfix_tokens, nullptr);
 }
 
@@ -66,7 +67,8 @@ ReversePolishNotationCalculator::GetFunction(const MathToken &token) const {
   } else if (token == "+") {
     return [](double l) { return l; };
   }
-  throw ReversePolishNotationCalcExceptions("math function not found or not implemented");
+  throw ReversePolishNotationCalcExceptions(
+      "math function not found or not implemented");
 }
 
 ReversePolishNotationCalculator::fptr<double, double>
@@ -89,23 +91,26 @@ ReversePolishNotationCalculator::GetOperator(const MathToken &token) const {
   } else if (token == "mod" || token == "%") {
     return [](double l, double r) { return std::fmod(l, r); };
   }
-  throw ReversePolishNotationCalcExceptions("math operator not found or not implemented");
+  throw ReversePolishNotationCalcExceptions(
+      "math operator not found or not implemented");
 }
 
 MathToken ReversePolishNotationCalculator::Calc(std::stack<MathToken> *stack,
-                                                const MathToken& token) const {
+                                                const MathToken &token) const {
   double left_operand = std::numeric_limits<double>::quiet_NaN();
   double right_operand = std::numeric_limits<double>::quiet_NaN();
 
   if (stack->empty()) {
-    throw ReversePolishNotationCalcExceptions("not enough operands for an operation");
+    throw ReversePolishNotationCalcExceptions(
+        "not enough operands for an operation");
   }
   right_operand = std::stod(stack->top().GetValue());
   stack->pop();
 
   if (token == Name::kOperator) {
     if (stack->empty()) {
-      throw ReversePolishNotationCalcExceptions("not enough operands for an operation");
+      throw ReversePolishNotationCalcExceptions(
+          "not enough operands for an operation");
     }
     left_operand = std::stod(stack->top().GetValue());
     stack->pop();
@@ -114,7 +119,8 @@ MathToken ReversePolishNotationCalculator::Calc(std::stack<MathToken> *stack,
   if (token == Name::kInfixFunction || token == Name::kUnaryOperator) {
     return {Name::kNumber, std::to_string(GetFunction(token)(right_operand))};
   } else if (token == Name::kOperator) {
-    return {Name::kNumber, std::to_string(GetOperator(token)(left_operand, right_operand))};
+    return {Name::kNumber,
+            std::to_string(GetOperator(token)(left_operand, right_operand))};
   } else {
     throw ReversePolishNotationCalcExceptions("token are not a operator");
   }

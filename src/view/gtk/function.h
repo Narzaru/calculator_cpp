@@ -1,17 +1,10 @@
-#ifndef SRC_CONTROLLER_FUNCTION_H_
-#define SRC_CONTROLLER_FUNCTION_H_
+#ifndef SRC_VIEW_GTK_FUNCTION_H_
+#define SRC_VIEW_GTK_FUNCTION_H_
 
-#include "calculator.h"
-#include <limits>
-#include <vector>
-
-namespace s21 {
+namespace s21::view {
 
 class UDFunction final {
-  using ICalculator = s21::calculator::ICalculator;
-  using double_limits = std::numeric_limits<double>;
-
-public:
+ public:
   UDFunction();
   explicit UDFunction(int number_of_dots);
   UDFunction(int number_of_dots, double x_begin, double x_end);
@@ -31,12 +24,12 @@ public:
 
   static bool IsNumber(const double &number);
 
-private:
+ private:
   int number_of_dots_;
 
   double *x_values_;
   double *y_values_;
 };
-} // namespace s21
+}  // namespace s21::view
 
-#endif // SRC_CONTROLLER_FUNCTION_H_
+#endif  // SRC_VIEW_GTK_FUNCTION_H_

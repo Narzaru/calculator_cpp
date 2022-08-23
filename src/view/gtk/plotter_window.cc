@@ -1,8 +1,7 @@
 #include "plotter_window.h"
 #include "gtkmm/drawingarea.h"
 
-namespace s21 {
-namespace view {
+namespace s21::view {
 
 PlotterArea::PlotterArea() {
   signal_draw().connect(sigc::mem_fun(*this, &PlotterArea::DrawCall));
@@ -61,7 +60,7 @@ void PlotterArea::draw_graph(const Cairo::RefPtr<Cairo::Context> &cr) {
   while (i < function_.Length()) {
     if (!UDFunction::IsNumber(function_.Y(i))) {
       while ((i < (function_.Length() - 1)) &&
-             !UDFunction::IsNumber(function_.Y(i))) {
+          !UDFunction::IsNumber(function_.Y(i))) {
         ++i;
       }
       cr->move_to(function_.X(i) * x_stretching_k_ + x_start_,
@@ -162,7 +161,7 @@ void PlotterArea::DrawGraph2D(const UDFunction &function,
   queue_draw();
 }
 
-PlotterWindow::PlotterWindow(s21::CalculatorController *controller)
+PlotterWindow::PlotterWindow(controller::CalculatorController *controller)
     : controller_(controller) {
   set_title("S21 math plotter");
   set_default_size(600, 500);
@@ -235,11 +234,10 @@ void PlotterWindow::Plot() {
   GraphProperties properties(x_min_entry_.get_text(), x_max_entry_.get_text(),
                              y_min_entry_.get_text(), y_max_entry_.get_text());
 
-  s21::UDFunction function = controller_->GetFunction(
+  UDFunction function = controller_->GetFunction(
       math_expression_entry_.get_text(), properties, 250000);
 
   draw_area_.DrawGraph2D(function, properties);
 }
 
-} // namespace view
-} // namespace s21
+}  // namespace s21::view

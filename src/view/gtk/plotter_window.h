@@ -1,8 +1,9 @@
 #ifndef SRC_VIEW_GTK_PLOTTER_WINDOW_H_
 #define SRC_VIEW_GTK_PLOTTER_WINDOW_H_
 
-#include "../controller/calculator_controller.h"
+#include "controller/calculator_controller.h"
 #include "function_properties.h"
+
 #include <gtkmm/box.h>
 #include <gtkmm/button.h>
 #include <gtkmm/drawingarea.h>
@@ -14,15 +15,15 @@
 namespace s21::view {
 
 class PlotterArea : public Gtk::Layout {
-public:
+ public:
   PlotterArea();
   ~PlotterArea() override = default;
 
   void DrawGraph2D(const UDFunction &function,
                    const GraphProperties &properties);
 
-private:
-  s21::UDFunction function_{};
+ private:
+  view::UDFunction function_{};
   GraphProperties properties_{};
 
   double box_left_{};
@@ -41,7 +42,6 @@ private:
   double x_start_{};
   double y_start_{};
 
-
   bool DrawCall(const Cairo::RefPtr<Cairo::Context> &cr);
   void draw_background(const Cairo::RefPtr<Cairo::Context> &cr);
   void draw_graph(const Cairo::RefPtr<Cairo::Context> &cr);
@@ -50,12 +50,12 @@ private:
 };
 
 class PlotterWindow : public Gtk::Window {
-public:
-  explicit PlotterWindow(s21::CalculatorController *controller);
+ public:
+  explicit PlotterWindow(controller::CalculatorController *controller);
   ~PlotterWindow() override = default;
 
-private:
-  s21::CalculatorController *controller_;
+ private:
+  controller::CalculatorController *controller_;
 
   Gtk::Box window_box_;
 
@@ -75,6 +75,6 @@ private:
   void Plot();
 };
 
-} // namespace s21::view
+}  // namespace s21::view
 
-#endif // SRC_VIEW_GTK_PLOTTER_WINDOW_H_
+#endif  // SRC_VIEW_GTK_PLOTTER_WINDOW_H_

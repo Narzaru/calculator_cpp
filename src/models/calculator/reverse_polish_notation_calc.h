@@ -32,7 +32,8 @@ namespace math {
 class IReversePolishNotationCalculator {
  public:
   [[nodiscard]] virtual double Calculate(const std::list<MathToken> &postfix_tokens) const = 0;
-  [[nodiscard]] virtual double Calculate(const std::list<MathToken> &postfix_tokens, const double *x) const = 0;
+  [[nodiscard]] virtual double Calculate(const std::list<MathToken> &postfix_tokens,
+                                         const double *x) const = 0;
   virtual ~IReversePolishNotationCalculator() = default;
 };
 
@@ -42,12 +43,13 @@ class ReversePolishNotationCalculator
   template<typename... args>
   using fptr = double (*)(args...);
   [[nodiscard]] double Calculate(const std::list<MathToken> &postfix_tokens) const override;
-  [[nodiscard]] double Calculate(const std::list<MathToken> &postfix_tokens, const double *x) const override;
+  [[nodiscard]] double Calculate(const std::list<MathToken> &postfix_tokens,
+                                 const double *x) const override;
 
  private:
   [[nodiscard]] fptr<double> GetFunction(const MathToken &token) const;
   [[nodiscard]] fptr<double, double> GetOperator(const MathToken &token) const;
-  MathToken Calc(std::stack<MathToken> *stack, const MathToken& token) const;
+  MathToken Calc(std::stack<MathToken> *stack, const MathToken &token) const;
 };
 
 }  // namespace math

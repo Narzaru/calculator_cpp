@@ -8,17 +8,18 @@
 
 namespace s21::math {
 
-template <typename token_name, typename token_value> class IBaseToken {
-public:
+template<typename token_name, typename token_value>
+class IBaseToken {
+ public:
   virtual ~IBaseToken() = default;
 
   [[nodiscard]] virtual const token_name &GetName() const = 0;
   [[nodiscard]] virtual const token_value &GetValue() const = 0;
 };
 
-template <typename token_name, typename token_value>
+template<typename token_name, typename token_value>
 class BaseToken : public IBaseToken<token_name, token_value> {
-public:
+ public:
   using name_type = token_name;
   using value_type = token_value;
 
@@ -41,7 +42,7 @@ public:
     return *this;
   }
 
-protected:
+ protected:
   name_type name_;
   value_type value_;
 };
@@ -59,9 +60,10 @@ enum class Name {
 };
 
 class MathToken : public BaseToken<Name, std::string> {
-public:
+ public:
   MathToken() : BaseToken() {}
-  MathToken(Name name, std::string value) : BaseToken(name, std::move(value)){};
+  MathToken(Name name, std::string value) : BaseToken(name,
+                                                      std::move(value)) {}
 
   bool operator==(const MathToken &other) const;
 
@@ -84,6 +86,6 @@ public:
   [[nodiscard]] bool IsLeftAssociative() const;
 };
 
-} // namespace s21::math
+}  // namespace s21::math
 
-#endif // SRC_MODELS_CALCULATOR_TOKEN_H_
+#endif  // SRC_MODELS_CALCULATOR_TOKEN_H_

@@ -31,8 +31,7 @@ class LexicalAnalyzer : public ILexicalAnalyzer {
 
  private:
   // A delimiter is a math operations and brackets
-  vector<string> delimiters{" ", "(", ")", "+", "-", "*",
-                            "/", "^", "%", "mod", "pow"};
+  static const std::array<std::string_view, 11> delimiters;
 
   void ClearSpaces(string *string);
   bool IsDelimiter(const string &string, size_type position);

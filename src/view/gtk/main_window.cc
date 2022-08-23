@@ -10,7 +10,8 @@ MainWindow::MainWindow(GtkWindow *c_object,
 
 MainWindow::~MainWindow() = default;
 
-void MainWindow::BindCalculatorController(CalculatorController *controller) {
+void MainWindow::BindCalculatorController(
+    controller::CalculatorController *controller) {
   controller_ = controller;
 }
 
@@ -71,8 +72,6 @@ void MainWindow::bind_buttons() {
 void MainWindow::SwitchToPlotter() {
   PlotterWindow *plotter = new PlotterWindow(controller_);
   plotter->show();
-  //  plotter->signal_hide().connect([this]() { set_sensitive(true); });
-  //  set_sensitive(false);
 }
 
 void MainWindow::bind_button_to_show_plotter(const char *glade_id) {
@@ -134,8 +133,10 @@ void MainWindow::del_char_from_entry() {
 }
 
 void MainWindow::evaluate() {
-  double result =
-      controller_->evaluate(entry_->get_text(), entry_x_->get_text());
+  const Glib::ustring &expression = entry_->get_text();
+  const Glib::ustring &x_str = entry_x_->get_text();
+
+  double result = controller_->evaluate(expression, x_str);
   clear_entry();
   std::string str_result = std::to_string(result);
   str_result.erase(str_result.find_last_not_of('0') + 1, std::string::npos);
@@ -143,4 +144,4 @@ void MainWindow::evaluate() {
   add_text_to_entry(str_result.c_str());
 }
 
-} // namespace s21::view
+}  // namespace s21::view

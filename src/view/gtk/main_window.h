@@ -6,7 +6,7 @@
 #include <gtkmm-3.0/gtkmm/entry.h>
 #include <gtkmm-3.0/gtkmm/window.h>
 
-#include "../../controller/calculator_controller.h"
+#include "controller/calculator_controller.h"
 #include "plotter_window.h"
 #include "sigc++/functors/mem_fun.h"
 
@@ -18,13 +18,13 @@ class MainWindow : public Gtk::Window {
   MainWindow(GtkWindow *c_object, const Glib::RefPtr<Gtk::Builder> &builder);
   ~MainWindow() override;
 
-  void BindCalculatorController(CalculatorController *controller);
+  void BindCalculatorController(controller::CalculatorController *controller);
 
  private:
   const Glib::RefPtr<Gtk::Builder> &builder_;
   Gtk::Entry *entry_;
   Gtk::Entry *entry_x_;
-  s21::CalculatorController *controller_;
+  controller::CalculatorController *controller_;
 
   void bind_buttons();
   void SwitchToPlotter();

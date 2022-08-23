@@ -8,7 +8,7 @@ namespace s21::view {
 class GraphProperties {
   using kstring = const std::string &;
 
-public:
+ public:
   GraphProperties();
   GraphProperties(kstring x_min, kstring x_max, kstring y_min, kstring y_max);
 
@@ -20,13 +20,13 @@ public:
 
   [[nodiscard]] const double &y_max() const;
 
-private:
+ private:
   double x_min_;
   double x_max_;
   double y_min_;
   double y_max_;
 };
 
-} // namespace s21::view
+}  // namespace s21::view
 
-#endif // SRC_VIEW_GTK_FUNCTION_PROPERTIES_H_
+#endif  // SRC_VIEW_GTK_FUNCTION_PROPERTIES_H_

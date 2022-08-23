@@ -25,9 +25,9 @@ ReversePolishNotationFormer::Create(const std::list<MathToken> &tokens) {
       stack.push(token);
     } else if (token.IsOperator()) {
       while (!stack.empty() && stack.top().IsOperator() &&
-             ((stack.top().Priority() > token.Priority()) ||
+          ((stack.top().Priority() > token.Priority()) ||
               (token.IsLeftAssociative() &&
-               (token.Priority() == stack.top().Priority())))) {
+                  (token.Priority() == stack.top().Priority())))) {
         out_tokens.push_back(std::move(stack.top()));
         stack.pop();
       }
@@ -79,4 +79,4 @@ bool ReversePolishNotationFormer::IsValidTokens(
   return true;
 }
 
-} // namespace s21::math
+}  // namespace s21::math

@@ -2,8 +2,9 @@
 #define SRC_MODELS_CALCULATOR_LEXEME_ANALYZER_H_
 
 #include <string>
+#include <string_view>
 #include <utility>
-#include <vector>
+#include <array>
 
 namespace s21::math {
 
@@ -30,9 +31,9 @@ class LexemeAnalyzer : public ILexemeAnalyzer {
 
  private:
   [[nodiscard]] bool IsDigit(int code) const;
-  std::vector<std::string> functions = {"cos", "sin", "tan", "acos", "asin",
-                                        "atan", "sqrt", "ln", "log"};
-  std::vector<std::string> operators = {"+", "-", "*", "/", "^", "mod", "%"};
+
+  static const std::array<std::string_view, 10> functions;
+  static const std::array<std::string_view, 10> operators;
 };
 
 }  // namespace s21::math

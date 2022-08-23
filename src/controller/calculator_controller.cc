@@ -1,6 +1,9 @@
 #include "calculator_controller.h"
 
-namespace s21 {
+#include <limits>
+
+namespace s21::controller {
+
 CalculatorController::CalculatorController(calculator::Calculator *calc)
     : calculator_(calc) {}
 
@@ -23,25 +26,25 @@ double CalculatorController::evaluate(const std::string &string,
   }
 }
 
-s21::UDFunction
+view::UDFunction
 CalculatorController::GetFunction(const std::string &expression,
-                                  const view::GraphProperties &prop,
+                                  const view::GraphProperties &properties,
                                   int dots_count) {
-
-  s21::UDFunction ret_function(dots_count, prop.x_min(), prop.x_max());
+  view::UDFunction function(dots_count, properties.x_min(),
+                            properties.x_max());
 
   try {
     calculator_->push_expression(expression);
     calculator_->compile_expression();
     for (int i = 0; i < dots_count; ++i) {
-      ret_function.Y(i) = calculator_->calculate(&ret_function.X(i));
+      function.Y(i) = calculator_->calculate(&function.X(i));
     }
-    ret_function.SetDomain(prop.y_min(), prop.y_max());
+    function.SetDomain(properties.y_min(), properties.y_max());
 
-    return ret_function;
+    return function;
   } catch (...) {
     return {};
   }
 }
 
-} // namespace s21
+}  // namespace s21::controller

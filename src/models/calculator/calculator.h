@@ -11,8 +11,9 @@
 #include "token.h"
 
 namespace s21::calculator {
+
 class ICalculator {
-public:
+ public:
   virtual void push_expression(std::string expression) = 0;
   virtual void compile_expression() = 0;
   [[nodiscard]] virtual double calculate() = 0;
@@ -24,7 +25,7 @@ public:
 };
 
 class Calculator : public ICalculator {
-public:
+ public:
   Calculator();
   ~Calculator() override;
 
@@ -38,7 +39,7 @@ public:
   [[nodiscard]] double calculate(const std::string &expression,
                                  const double *x) override;
 
-private:
+ private:
   math::ILexicalAnalyzer *lexical_analyzer;
   math::ISyntacticalAnalyzer *syntactical_analyzer;
   math::IReversePolishNotationFormer *rpn_former;
@@ -47,6 +48,6 @@ private:
   std::list<math::MathToken> rpn_tokens_;
 };
 
-} // namespace s21::calculator
+}  // namespace s21::calculator
 
-#endif // SRC_MODELS_CALCULATOR_CALCULATOR_H_
+#endif  // SRC_MODELS_CALCULATOR_CALCULATOR_H_

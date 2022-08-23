@@ -49,7 +49,8 @@ int MathToken::Priority() const {
     priority = 2;
   } else if (value_ == "mod" || value_ == "%") {
     priority = 2;
-  } else if (value_ == "^" || value_ == "pow" || name_ == Name::kUnaryOperator) {
+  } else if (value_ == "^" || value_ == "pow"
+      || name_ == Name::kUnaryOperator) {
     priority = 3;
   } else if (name_ == Name::kInfixFunction) {
     priority = -1;
@@ -63,4 +64,4 @@ bool MathToken::IsWrong() const {
   return name_ == Name::kUnknown || name_ == Name::kEmpty;
 }
 
-} // namespace s21::math
+}  // namespace s21::math

@@ -4,6 +4,12 @@
 
 namespace s21::math {
 
+const std::array<std::string_view, 10> LexemeAnalyzer::functions(
+    {"cos", "sin", "tan", "acos", "asin", "atan", "sqrt", "ln", "log"});
+
+const std::array<std::string_view, 10> LexemeAnalyzer::operators(
+    {"+", "-", "*", "/", "^", "mod", "%"});
+
 bool LexemeAnalyzer::IsDigit(int code) const {
   if (code >= '0' && code <= '9') {
     return true;
@@ -17,56 +23,55 @@ bool LexemeAnalyzer::IsNumber(const std::string &lexeme) const {
   int state = 0;
   for (const char &chr : lexeme) {
     switch (state) {
-    case 0:
-      if (IsDigit(chr)) {
-        state = 1;
-      } else {
-        state = 6;
-      }
-      break;
-    case 1:
-      if (IsDigit(chr)) {
-        state = 1;
-      } else if (chr == '.') {
-        state = 2;
-      } else if (chr == 'e' || chr == 'E') {
-        state = 3;
-      } else {
-        state = 6;
-      }
-      break;
-    case 2:
-      if (IsDigit(chr)) {
-        state = 2;
-      } else if (chr == 'e' || chr == 'E') {
-        state = 3;
-      }
-      break;
-    case 3:
-      if (IsDigit(chr)) {
-        state = 5;
-      } else if (chr == '+' || chr == '-') {
-        state = 4;
-      } else {
-        state = 6;
-      }
-      break;
-    case 4:
-      if (IsDigit(chr)) {
-        state = 5;
-      } else {
-        state = 6;
-      }
-      break;
-    case 5:
-      if (IsDigit(chr)) {
-        state = 5;
-      } else {
-        state = 6;
-      }
-      break;
-    default:
-      break;
+      case 0:
+        if (IsDigit(chr)) {
+          state = 1;
+        } else {
+          state = 6;
+        }
+        break;
+      case 1:
+        if (IsDigit(chr)) {
+          state = 1;
+        } else if (chr == '.') {
+          state = 2;
+        } else if (chr == 'e' || chr == 'E') {
+          state = 3;
+        } else {
+          state = 6;
+        }
+        break;
+      case 2:
+        if (IsDigit(chr)) {
+          state = 2;
+        } else if (chr == 'e' || chr == 'E') {
+          state = 3;
+        }
+        break;
+      case 3:
+        if (IsDigit(chr)) {
+          state = 5;
+        } else if (chr == '+' || chr == '-') {
+          state = 4;
+        } else {
+          state = 6;
+        }
+        break;
+      case 4:
+        if (IsDigit(chr)) {
+          state = 5;
+        } else {
+          state = 6;
+        }
+        break;
+      case 5:
+        if (IsDigit(chr)) {
+          state = 5;
+        } else {
+          state = 6;
+        }
+        break;
+      default:break;
     }
   }
   // success states 1 2 5
@@ -82,7 +87,7 @@ bool LexemeAnalyzer::IsOpenBracket(const std::string &lexeme) const {
 }
 
 bool LexemeAnalyzer::IsFunction(const std::string &lexeme) const {
-  for (const std::string &item : functions) {
+  for (const auto &item : functions) {
     if (lexeme == item) {
       return true;
     }
@@ -91,7 +96,7 @@ bool LexemeAnalyzer::IsFunction(const std::string &lexeme) const {
 }
 
 bool LexemeAnalyzer::IsOperator(const std::string &lexeme) const {
-  for (const std::string &item : operators) {
+  for (const auto &item : operators) {
     if (lexeme == item) {
       return true;
     }
@@ -114,4 +119,4 @@ bool LexemeAnalyzer::IsVariable(const std::string &lexeme) const {
   return false;
 }
 
-} // namespace s21::math
+}  // namespace s21::math

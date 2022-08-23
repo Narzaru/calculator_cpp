@@ -16,7 +16,8 @@ class ISyntacticalAnalyzer {
   virtual ~ISyntacticalAnalyzer() = default;
 };
 
-class SyntacticalAnalyzer final : public ISyntacticalAnalyzer, public LexemeAnalyzer {
+class SyntacticalAnalyzer final : public ISyntacticalAnalyzer
+                                  , public LexemeAnalyzer {
  public:
   [[nodiscard]] std::list<MathToken> Compile(const std::list<std::string> &lexemes) override;
 

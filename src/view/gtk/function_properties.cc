@@ -23,4 +23,4 @@ const double &GraphProperties::y_min() const { return y_min_; }
 
 const double &GraphProperties::y_max() const { return y_max_; }
 
-} // namespace s21::view
+}  // namespace s21::view
