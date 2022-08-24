@@ -5,7 +5,7 @@
 namespace s21::math {
 
 const std::array<std::string_view, 10> LexemeAnalyzer::functions(
-    {"cos", "sin", "tan", "acos", "asin", "atan", "sqrt", "ln", "log"});
+    {"cos", "sin", "tan", "acos", "asin", "atan", "sqrt", "ln", "log", "abs"});
 
 const std::array<std::string_view, 10> LexemeAnalyzer::operators(
     {"+", "-", "*", "/", "^", "mod", "%"});
