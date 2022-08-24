@@ -8,11 +8,43 @@
 
 namespace s21::calculator {
 
-Calculator::Calculator() {
-  lexical_analyzer = new math::LexicalAnalyzer;
-  syntactical_analyzer = new math::SyntacticalAnalyzer;
-  rpn_former = new math::ReversePolishNotationFormer;
-  rpn_calculator = new math::ReversePolishNotationCalculator;
+Calculator::Calculator() : lexical_analyzer(nullptr), syntactical_analyzer(
+    nullptr), rpn_former(nullptr), rpn_calculator(nullptr) {
+  try {
+    lexical_analyzer = new math::LexicalAnalyzer;
+  } catch (std::bad_alloc &e) {
+    lexical_analyzer = nullptr;
+  }
+  try {
+    syntactical_analyzer = new math::SyntacticalAnalyzer;
+  } catch (std::bad_alloc &e) {
+    delete lexical_analyzer;
+    lexical_analyzer = nullptr;
+    syntactical_analyzer = nullptr;
+    throw std::bad_alloc();
+  }
+  try {
+    rpn_former = new math::ReversePolishNotationFormer;
+  } catch (std::bad_alloc &e) {
+    delete lexical_analyzer;
+    delete syntactical_analyzer;
+    lexical_analyzer = nullptr;
+    syntactical_analyzer = nullptr;
+    rpn_former = nullptr;
+    throw std::bad_alloc();
+  }
+  try {
+    rpn_calculator = new math::ReversePolishNotationCalculator;
+  } catch (std::bad_alloc &e) {
+    delete lexical_analyzer;
+    delete syntactical_analyzer;
+    delete rpn_former;
+    lexical_analyzer = nullptr;
+    syntactical_analyzer = nullptr;
+    rpn_former = nullptr;
+    rpn_calculator = nullptr;
+    throw std::bad_alloc();
+  }
 }
 
 Calculator::~Calculator() {
@@ -22,8 +54,8 @@ Calculator::~Calculator() {
   delete rpn_calculator;
 }
 
-void Calculator::push_expression(std::string expression) {
-  expression_ = std::move(expression);
+void Calculator::push_expression(const std::string &expression) {
+  expression_ = expression;
 }
 
 void Calculator::compile_expression() {

@@ -14,7 +14,7 @@ namespace s21::calculator {
 
 class ICalculator {
  public:
-  virtual void push_expression(std::string expression) = 0;
+  virtual void push_expression(const std::string &expression) = 0;
   virtual void compile_expression() = 0;
   [[nodiscard]] virtual double calculate() = 0;
   [[nodiscard]] virtual double calculate(const double *x) = 0;
@@ -29,7 +29,7 @@ class Calculator : public ICalculator {
   Calculator();
   ~Calculator() override;
 
-  void push_expression(std::string expression) override;
+  void push_expression(const std::string &expression) override;
   void compile_expression() override;
 
   [[nodiscard]] double calculate() override;
