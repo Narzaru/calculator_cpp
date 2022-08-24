@@ -28,8 +28,10 @@ class MainWindow : public Gtk::Window {
 
   void bind_buttons();
   void SwitchToPlotter();
+  void SwitchToCredit();
 
   void bind_button_to_show_plotter(const char *glade_id);
+  void bind_button_to_show_credit(const char *glade_id);
   void bind_button_to_add_text_entry(const char *glade_id, const char *text);
   void bind_button_to_clear_entry(const char *glade_id);
   void bind_button_to_del_char_entry(const char *glade_id);

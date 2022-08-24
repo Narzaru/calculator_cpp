@@ -24,6 +24,17 @@ $(CALC_BUILD_DIR)/%.o: models/calculator/%.cc
 $(CALC_BUILD_DIR)/libcalculator.a: $(CALC_OBJS)
 	ar rcs $@ $^
 
+# Libbank.a
+BANK_BUILD_DIR = build/bank
+BANK_SRCS = $(shell find ./models/bank -name "*.cc")
+BANK_OBJS = $(addprefix $(BANK_BUILD_DIR)/,$(notdir $(BANK_SRCS:%.cc=%.o)))
+
+$(BANK_BUILD_DIR)/%.o: models/bank/%.cc
+	$(CXX) -O3 $(CXXFLAGS) -c $< -o $@ $(INCLUDE_PATHS)
+
+$(BANK_BUILD_DIR)/libbank.a: $(BANK_OBJS)
+	ar rcs $@ $^
+
 # Tests
 TESTS_BUILD_DIR = build/test
 TESTS_SRCS = $(shell find ./test -name "*.cc")
@@ -62,7 +73,7 @@ $(CNTRL_BUILD_DIR)/%.o: controller/%.cc
 build/main.o: main.cc
 	$(CXX) $(CXXFLAGS) -c $< -o $@ `pkg-config gtkmm-3.0 --libs --cflags` $(INCLUDE_PATHS)
 
-calculator: build/main.o $(VIEW_OBJS) $(CNTRL_OBJS) $(CALC_BUILD_DIR)/libcalculator.a
+calculator: build/main.o $(VIEW_OBJS) $(CNTRL_OBJS) $(CALC_BUILD_DIR)/libcalculator.a $(BANK_BUILD_DIR)/libbank.a
 	$(CXX) $(CXXFLAGS) $^ -o $@ `pkg-config gtkmm-3.0 --libs --cflags` $(INCLUDE_PATHS)
 
 # Gcov report

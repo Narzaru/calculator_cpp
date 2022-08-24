@@ -1,5 +1,7 @@
-#include "main_window.h"
 #include <algorithm>
+
+#include "main_window.h"
+#include "credit_window.h"
 
 namespace s21::view {
 MainWindow::MainWindow(GtkWindow *c_object,
@@ -64,6 +66,8 @@ void MainWindow::bind_buttons() {
   bind_button_to_evaluate("button_=");
 
   bind_button_to_show_plotter("button_plot");
+  bind_button_to_show_credit("button_credit");
+
 
   entry_->signal_activate().connect(
       sigc::mem_fun(*this, &MainWindow::evaluate));
@@ -74,11 +78,23 @@ void MainWindow::SwitchToPlotter() {
   plotter->show();
 }
 
+void MainWindow::SwitchToCredit() {
+  CreditWindow *credit = new CreditWindow(controller_);
+  credit->show();
+}
+
 void MainWindow::bind_button_to_show_plotter(const char *glade_id) {
   Gtk::Button *temp_button_ref;
   builder_->get_widget(glade_id, temp_button_ref);
   temp_button_ref->signal_clicked().connect(
       sigc::mem_fun(*this, &MainWindow::SwitchToPlotter));
+}
+
+void MainWindow::bind_button_to_show_credit(const char *glade_id) {
+  Gtk::Button *temp_button_ref;
+  builder_->get_widget(glade_id, temp_button_ref);
+  temp_button_ref->signal_clicked().connect(
+      sigc::mem_fun(*this, &MainWindow::SwitchToCredit));
 }
 
 void MainWindow::bind_button_to_add_text_entry(const char *glade_id,
