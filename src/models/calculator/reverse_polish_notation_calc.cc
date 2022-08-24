@@ -2,10 +2,7 @@
 #include "reverse_polish_notation_calc.h"
 
 #include <cmath>
-#include <functional>
-#include <iostream>
 #include <limits>
-#include <math.h>
 #include <stack>
 #include <string>
 
@@ -64,6 +61,8 @@ ReversePolishNotationCalculator::GetFunction(const MathToken &token) const {
     return std::log10;
   } else if (token == "-") {
     return [](double l) { return -1.0 * l; };
+  } else if (token == "abs") {
+    return std::abs;
   } else if (token == "+") {
     return [](double l) { return l; };
   }
