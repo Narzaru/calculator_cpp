@@ -4,13 +4,12 @@
 
 namespace s21::controller {
 
-CalculatorController::CalculatorController(calculator::Calculator *calc)
-    : calculator_(calc) {}
+CalculatorController::CalculatorController(calculator::Calculator *calc, bank::CreditCalc *credit_calc)
+    : calculator_(calc), credit_calculator_(credit_calc) {}
 
 CalculatorController::~CalculatorController() = default;
 
-double CalculatorController::evaluate(const std::string &string,
-                                      const std::string &x) {
+double CalculatorController::evaluate(kstring string, kstring &x) {
   double num_x = 0.0;
 
   try {
@@ -26,12 +25,8 @@ double CalculatorController::evaluate(const std::string &string,
   }
 }
 
-view::UDFunction
-CalculatorController::GetFunction(const std::string &expression,
-                                  const view::GraphProperties &properties,
-                                  int dots_count) {
-  view::UDFunction function(dots_count, properties.x_min(),
-                            properties.x_max());
+view::UDFunction CalculatorController::GetFunction(kstring &expression, fprop &properties, int dots_count) {
+  view::UDFunction function(dots_count, properties.x_min(), properties.x_max());
 
   try {
     calculator_->push_expression(expression);
@@ -40,11 +35,54 @@ CalculatorController::GetFunction(const std::string &expression,
       function.Y(i) = calculator_->calculate(&function.X(i));
     }
     function.SetDomain(properties.y_min(), properties.y_max());
-
     return function;
   } catch (...) {
     return {};
   }
+}
+
+view::CreditInfo CalculatorController::GetCreditInfo(kstring amount_str,
+                                                     kstring term_str,
+                                                     kstring interest_rate_str,
+                                                     CreditInfo::credit_type type) {
+  double amount = 0.;
+  int term = 0;
+  double interest_rate = 0.;
+
+  try {
+    amount = std::stod(amount_str);
+    term = static_cast<int>(std::stod(term_str));
+    interest_rate = std::stod(interest_rate_str);
+
+    if (amount <= 0 || term <= 0 || interest_rate <= 0) {
+      throw std::invalid_argument("negative value");
+    }
+  } catch (...) {
+    return {};
+  }
+
+  view::CreditInfo info;
+  credit_calculator_->Set(amount, term, interest_rate);
+
+  std::vector<double> payments;
+
+  if (type == view::CreditInfo::annuity) {
+    payments = credit_calculator_->AnnuityPayments();
+  } else if (type == view::CreditInfo::differentiated) {
+    payments = credit_calculator_->DifferentiatedPayments();
+  }
+
+  for (const auto &item : payments) {
+    info.out_info_.monthly_payments.push_back(std::to_string(item));
+  }
+
+  double total = credit_calculator_->TotalPayments(payments);
+  double overpayment = total - amount;
+
+  info.out_info_.total_payment = std::to_string(total);
+  info.out_info_.overpayment_on_credit = std::to_string(overpayment);
+
+  return info;
 }
 
 }  // namespace s21::controller

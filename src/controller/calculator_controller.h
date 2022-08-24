@@ -2,26 +2,37 @@
 #define SRC_CONTROLLER_CALCULATOR_CONTROLLER_H_
 
 #include "models/calculator/calculator.h"
+#include "models/bank/credit.h"
+
 #include "view/gtk/function.h"
 #include "view/gtk/function_properties.h"
+#include "view/gtk/credit_info.h"
 
 #include <string>
 
 namespace s21::controller {
 
 class CalculatorController {
+  using kstring = const std::string &;
+  using UDFunction = view::UDFunction;
+  using fprop = const view::GraphProperties &;
+  using CreditInfo = view::CreditInfo;
  public:
-  explicit CalculatorController(calculator::Calculator *calc);
+  explicit CalculatorController(calculator::Calculator *calc, bank::CreditCalc *credit_calc);
   ~CalculatorController();
 
-  double evaluate(const std::string &string, const std::string &x);
+  double evaluate(kstring string, kstring x);
 
-  view::UDFunction GetFunction(const std::string &expression,
-                               const view::GraphProperties &properties,
-                               int dots_count);
+  UDFunction GetFunction(kstring expression, fprop &properties, int dots_count);
+
+  CreditInfo GetCreditInfo(kstring amount_str,
+                           kstring term_str,
+                           kstring interest_rate_str,
+                           view::CreditInfo::credit_type type);
 
  private:
   calculator::Calculator *calculator_;
+  bank::CreditCalc *credit_calculator_;
 };
 
 }  // namespace s21::controller
