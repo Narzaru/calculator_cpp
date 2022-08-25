@@ -20,7 +20,7 @@ void MainWindow::BindCalculatorController(
 MainWindow *MainWindow::GetInstance() {
   MainWindow *calculator_instance;
   Glib::RefPtr<Gtk::Builder> builder =
-      Gtk::Builder::create_from_file("ui.glade");
+      Gtk::Builder::create_from_resource("/uis/ui.glade");
   builder->get_widget_derived("calculator_view", calculator_instance);
   return calculator_instance;
 }

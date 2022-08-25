@@ -4,7 +4,7 @@ CXXFLAGS := -MD
 ifeq (true, true)
 	CXXFLAGS += -Wall -Wextra
 	ifeq ($(shell uname), Linux)
-		CXXFLAGS += -g -fsanitize=address
+		CXXFLAGS += -g# -fsanitize=address
 	else ifeq ($(shell uname), Darwin)
 		CXXFLAGS += -g
 	endif
@@ -73,7 +73,12 @@ $(CNTRL_BUILD_DIR)/%.o: controller/%.cc
 build/main.o: main.cc
 	$(CXX) $(CXXFLAGS) -c $< -o $@ `pkg-config gtkmm-3.0 --libs --cflags` $(INCLUDE_PATHS)
 
-calculator: build/main.o $(VIEW_OBJS) $(CNTRL_OBJS) $(CALC_BUILD_DIR)/libcalculator.a $(BANK_BUILD_DIR)/libbank.a
+programm.gresource.xml: ui.glade
+
+resources.c: programm.gresource.xml
+	glib-compile-resources --target=resources.c --generate-source $^
+
+calculator: build/main.o resources.c $(VIEW_OBJS) $(CNTRL_OBJS) $(CALC_BUILD_DIR)/libcalculator.a $(BANK_BUILD_DIR)/libbank.a
 	$(CXX) $(CXXFLAGS) $^ -o $@ `pkg-config gtkmm-3.0 --libs --cflags` $(INCLUDE_PATHS)
 
 # Gcov report
@@ -97,9 +102,45 @@ clean:
 	@find -name "*.a" -delete
 	@find -name "*.gcno" -delete
 	@find -name "*.gcda" -delete
-	@rm -f tests
-	@rm -f calculator
-	@rm -f tests.info
+	@rm -f tests calculator tests.info resources.c
 	@rm -rf gcov_report
+	@rm -rf src
+
+
+
+PROJECT_ROOT_FOLDER := src
+PROJECT_FOLDERS := \
+	$(PROJECT_ROOT_FOLDER) \
+	$(PROJECT_ROOT_FOLDER)/build \
+	$(PROJECT_ROOT_FOLDER)/build/bank \
+	$(PROJECT_ROOT_FOLDER)/build/calculator \
+	$(PROJECT_ROOT_FOLDER)/build/controller \
+	$(PROJECT_ROOT_FOLDER)/build/tests \
+	$(PROJECT_ROOT_FOLDER)/build/view \
+	$(PROJECT_ROOT_FOLDER)/controller \
+	$(PROJECT_ROOT_FOLDER)/models \
+	$(PROJECT_ROOT_FOLDER)/models/calculator \
+	$(PROJECT_ROOT_FOLDER)/models/bank \
+	$(PROJECT_ROOT_FOLDER)/test \
+	$(PROJECT_ROOT_FOLDER)/view \
+	$(PROJECT_ROOT_FOLDER)/view/gtk
+
+dist:
+	@for dir in $(PROJECT_FOLDERS); \
+		do \
+			if [ ! -d $$dir ]; \
+			then \
+				mkdir $$dir; \
+			fi; \
+		done;
+	@cp ./controller/* ./src/controller/
+	@cp ./models/bank/* ./src/models/bank/
+	@cp ./models/calculator/* ./src/models/calculator/
+	@cp ./test/* ./src/test/
+	@cp ./view/gtk/* ./src/view/gtk/
+	@cp main.cc Makefile programm.gresource.xml ui.glade ./src/
+
+
+.PHONY: clean dist linter
 
 -include $(shell find ./build -name "*.d")
