@@ -5,7 +5,7 @@
 
 namespace s21::bank {
 
-CreditCalc::CreditCalc() : amount_(0.0), term_(0.0), interest_rate_(0.0) {};
+CreditCalc::CreditCalc() : amount_(0.0), term_(0.0), interest_rate_(0.0) {}
 
 CreditCalc &CreditCalc::Set(double amount, int term, double interest_rate) {
   amount_ = amount;
@@ -45,4 +45,4 @@ double CreditCalc::TotalPayments(const Payments &all) {
   return std::accumulate(all.begin(), all.end(), 0.0);
 }
 
-}  // s21::credit
+}  // namespace s21::bank

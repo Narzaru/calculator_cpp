@@ -8,7 +8,7 @@
 
 namespace s21::math {
 
-const std::array<std::string_view, 11> LexicalAnalyzer::delimiters(
+const std::array<std::string_view, 11> LexicalAnalyzer::delimiters_(
     {" ", "(", ")", "+", "-", "*", "/", "^", "%", "mod", "pow"});
 
 std::list<std::string> LexicalAnalyzer::ParseString(string expression) {
@@ -36,7 +36,7 @@ void LexicalAnalyzer::ClearSpaces(string *expr_str) {
 }
 
 bool LexicalAnalyzer::IsDelimiter(const string &expr_str, size_type position) {
-  for (const auto &delim : delimiters) {
+  for (const auto &delim : delimiters_) {
     if (expr_str.length() - position >= delim.length()) {
       if (expr_str.find(delim, position) == position) {
         return true;
@@ -49,7 +49,7 @@ bool LexicalAnalyzer::IsDelimiter(const string &expr_str, size_type position) {
 std::size_t LexicalAnalyzer::GetDelimiterLength(const string &string,
                                                 size_type position) {
   std::basic_string<char> previous_character;
-  for (const auto &delim : delimiters) {
+  for (const auto &delim : delimiters_) {
     if (string.length() - position >= delim.length()) {
       if (string.find(delim, position) == position) {
         return delim.length();

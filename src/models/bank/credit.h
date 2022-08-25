@@ -21,6 +21,6 @@ class CreditCalc {
   double interest_rate_;
 };
 
-}  // s21::credit
+}  // namespace s21::bank
 
-#endif //SRC_MODELS_BANK_CREDIT_H_
+#endif  // SRC_MODELS_BANK_CREDIT_H_

@@ -32,8 +32,8 @@ class LexemeAnalyzer : public ILexemeAnalyzer {
  private:
   [[nodiscard]] bool IsDigit(int code) const;
 
-  static const std::array<std::string_view, 10> functions;
-  static const std::array<std::string_view, 10> operators;
+  static const std::array<std::string_view, 10> functions_;
+  static const std::array<std::string_view, 10> operators_;
 };
 
 }  // namespace s21::math

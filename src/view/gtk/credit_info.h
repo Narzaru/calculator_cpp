@@ -12,13 +12,13 @@ struct Payments {
 };
 
 struct CreditInfo {
-  enum credit_type {
-    annuity = 0,
-    differentiated = 1
+  enum CreditType {
+    kAnnuity = 0,
+    kDifferentiated = 1
   };
 
-  Payments out_info_;
+  Payments out_info;
 };
 
 }  // namespace s21::view
-#endif //SRC_VIEW_GTK_CREDIT_INFO_H_
+#endif  // SRC_VIEW_GTK_CREDIT_INFO_H_

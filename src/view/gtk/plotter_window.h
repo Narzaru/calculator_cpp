@@ -72,6 +72,7 @@ class PlotterWindow : public Gtk::Window {
   PlotterArea draw_area_;
 
   bool PlotterKeyHandler(GdkEventKey *event);
+  void ButtonPlotHandler();
   void Plot();
 };
 

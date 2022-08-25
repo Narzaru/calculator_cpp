@@ -8,88 +8,88 @@
 
 namespace s21::calculator {
 
-Calculator::Calculator() : lexical_analyzer(nullptr), syntactical_analyzer(
-    nullptr), rpn_former(nullptr), rpn_calculator(nullptr) {
+Calculator::Calculator() : lexical_analyzer_(nullptr), syntactical_analyzer_(
+    nullptr), rpn_former_(nullptr), rpn_calculator_(nullptr) {
   try {
-    lexical_analyzer = new math::LexicalAnalyzer;
+    lexical_analyzer_ = new math::LexicalAnalyzer;
   } catch (std::bad_alloc &e) {
-    lexical_analyzer = nullptr;
+    lexical_analyzer_ = nullptr;
   }
   try {
-    syntactical_analyzer = new math::SyntacticalAnalyzer;
+    syntactical_analyzer_ = new math::SyntacticalAnalyzer;
   } catch (std::bad_alloc &e) {
-    delete lexical_analyzer;
-    lexical_analyzer = nullptr;
-    syntactical_analyzer = nullptr;
+    delete lexical_analyzer_;
+    lexical_analyzer_ = nullptr;
+    syntactical_analyzer_ = nullptr;
     throw std::bad_alloc();
   }
   try {
-    rpn_former = new math::ReversePolishNotationFormer;
+    rpn_former_ = new math::ReversePolishNotationFormer;
   } catch (std::bad_alloc &e) {
-    delete lexical_analyzer;
-    delete syntactical_analyzer;
-    lexical_analyzer = nullptr;
-    syntactical_analyzer = nullptr;
-    rpn_former = nullptr;
+    delete lexical_analyzer_;
+    delete syntactical_analyzer_;
+    lexical_analyzer_ = nullptr;
+    syntactical_analyzer_ = nullptr;
+    rpn_former_ = nullptr;
     throw std::bad_alloc();
   }
   try {
-    rpn_calculator = new math::ReversePolishNotationCalculator;
+    rpn_calculator_ = new math::ReversePolishNotationCalculator;
   } catch (std::bad_alloc &e) {
-    delete lexical_analyzer;
-    delete syntactical_analyzer;
-    delete rpn_former;
-    lexical_analyzer = nullptr;
-    syntactical_analyzer = nullptr;
-    rpn_former = nullptr;
-    rpn_calculator = nullptr;
+    delete lexical_analyzer_;
+    delete syntactical_analyzer_;
+    delete rpn_former_;
+    lexical_analyzer_ = nullptr;
+    syntactical_analyzer_ = nullptr;
+    rpn_former_ = nullptr;
+    rpn_calculator_ = nullptr;
     throw std::bad_alloc();
   }
 }
 
 Calculator::~Calculator() {
-  delete lexical_analyzer;
-  delete syntactical_analyzer;
-  delete rpn_former;
-  delete rpn_calculator;
+  delete lexical_analyzer_;
+  delete syntactical_analyzer_;
+  delete rpn_former_;
+  delete rpn_calculator_;
 }
 
-void Calculator::push_expression(const std::string &expression) {
+void Calculator::PushExpression(const std::string &expression) {
   expression_ = expression;
 }
 
-void Calculator::compile_expression() {
+void Calculator::CompileExpression() {
   std::list<std::string> list_of_lexemes;
-  list_of_lexemes = lexical_analyzer->ParseString(expression_);
+  list_of_lexemes = lexical_analyzer_->ParseString(expression_);
 
   std::list<s21::math::MathToken> list_of_tokens;
-  list_of_tokens = syntactical_analyzer->Compile(list_of_lexemes);
+  list_of_tokens = syntactical_analyzer_->Compile(list_of_lexemes);
 
-  list_of_tokens = rpn_former->Create(list_of_tokens);
+  list_of_tokens = rpn_former_->Create(list_of_tokens);
 
   rpn_tokens_ = list_of_tokens;
 }
 
-double Calculator::calculate() { return this->calculate(nullptr); }
+double Calculator::Calculate() { return this->Calculate(nullptr); }
 
-double Calculator::calculate(const double *x) {
-  return rpn_calculator->Calculate(rpn_tokens_, x);
+double Calculator::Calculate(const double *x) {
+  return rpn_calculator_->Calculate(rpn_tokens_, x);
 }
 
-double Calculator::calculate(const std::string &expression) {
-  return calculate(expression, nullptr);
+double Calculator::Calculate(const std::string &expression) {
+  return Calculate(expression, nullptr);
 }
 
-double Calculator::calculate(const std::string &expression, const double *x) {
+double Calculator::Calculate(const std::string &expression, const double *x) {
   std::list<std::string> list_of_lexemes;
-  list_of_lexemes = lexical_analyzer->ParseString(expression);
+  list_of_lexemes = lexical_analyzer_->ParseString(expression);
 
   std::list<s21::math::MathToken> list_of_tokens;
-  list_of_tokens = syntactical_analyzer->Compile(list_of_lexemes);
+  list_of_tokens = syntactical_analyzer_->Compile(list_of_lexemes);
 
-  list_of_tokens = rpn_former->Create(list_of_tokens);
+  list_of_tokens = rpn_former_->Create(list_of_tokens);
 
-  return rpn_calculator->Calculate(list_of_tokens, x);
+  return rpn_calculator_->Calculate(list_of_tokens, x);
 }
 
 }  // namespace s21::calculator

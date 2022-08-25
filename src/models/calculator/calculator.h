@@ -14,12 +14,12 @@ namespace s21::calculator {
 
 class ICalculator {
  public:
-  virtual void push_expression(const std::string &expression) = 0;
-  virtual void compile_expression() = 0;
-  [[nodiscard]] virtual double calculate() = 0;
-  [[nodiscard]] virtual double calculate(const double *x) = 0;
-  [[nodiscard]] virtual double calculate(const std::string &expression) = 0;
-  [[nodiscard]] virtual double calculate(const std::string &expression,
+  virtual void PushExpression(const std::string &expression) = 0;
+  virtual void CompileExpression() = 0;
+  [[nodiscard]] virtual double Calculate() = 0;
+  [[nodiscard]] virtual double Calculate(const double *x) = 0;
+  [[nodiscard]] virtual double Calculate(const std::string &expression) = 0;
+  [[nodiscard]] virtual double Calculate(const std::string &expression,
                                          const double *x) = 0;
   virtual ~ICalculator() = default;
 };
@@ -29,21 +29,21 @@ class Calculator : public ICalculator {
   Calculator();
   ~Calculator() override;
 
-  void push_expression(const std::string &expression) override;
-  void compile_expression() override;
+  void PushExpression(const std::string &expression) override;
+  void CompileExpression() override;
 
-  [[nodiscard]] double calculate() override;
-  [[nodiscard]] double calculate(const double *x) override;
+  [[nodiscard]] double Calculate() override;
+  [[nodiscard]] double Calculate(const double *x) override;
 
-  [[nodiscard]] double calculate(const std::string &expression) override;
-  [[nodiscard]] double calculate(const std::string &expression,
+  [[nodiscard]] double Calculate(const std::string &expression) override;
+  [[nodiscard]] double Calculate(const std::string &expression,
                                  const double *x) override;
 
  private:
-  math::ILexicalAnalyzer *lexical_analyzer;
-  math::ISyntacticalAnalyzer *syntactical_analyzer;
-  math::IReversePolishNotationFormer *rpn_former;
-  math::IReversePolishNotationCalculator *rpn_calculator;
+  math::ILexicalAnalyzer *lexical_analyzer_;
+  math::ISyntacticalAnalyzer *syntactical_analyzer_;
+  math::IReversePolishNotationFormer *rpn_former_;
+  math::IReversePolishNotationCalculator *rpn_calculator_;
   std::string expression_;
   std::list<math::MathToken> rpn_tokens_;
 };

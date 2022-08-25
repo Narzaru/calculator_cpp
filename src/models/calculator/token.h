@@ -62,8 +62,7 @@ enum class Name {
 class MathToken : public BaseToken<Name, std::string> {
  public:
   MathToken() : BaseToken() {}
-  MathToken(Name name, std::string value) : BaseToken(name,
-                                                      std::move(value)) {}
+  MathToken(Name name, std::string value) : BaseToken(name, std::move(value)) {}
 
   bool operator==(const MathToken &other) const;
 

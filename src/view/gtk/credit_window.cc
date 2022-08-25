@@ -1,7 +1,5 @@
 #include <gtkmm/box.h>
 #include <gtkmm/scrolledwindow.h>
-#include <gtkmm/viewport.h>
-#include <gtkmm/listbox.h>
 
 #include <iostream>
 #include <gtkmm/cellrendererprogress.h>
@@ -25,7 +23,7 @@ CreditWindow::CreditWindow(controller::CalculatorController *controller)
 
   // Left box
   //// User input
-  Gtk::Box *user_box = new Gtk::Box;
+  auto *user_box = new Gtk::Box;
   user_box->set_orientation(Gtk::ORIENTATION_VERTICAL);
   user_box->set_spacing(5);
   user_box->add(payment_type_);
@@ -34,9 +32,9 @@ CreditWindow::CreditWindow(controller::CalculatorController *controller)
   user_box->add(interest_rate_);
 
   //// Overpayment and total payment output
-  Gtk::Label *overpayment_label = new Gtk::Label;
+  auto *overpayment_label = new Gtk::Label;
   overpayment_label->set_text("overpayment on credit");
-  Gtk::Label *total_payment_label = new Gtk::Label;
+  auto *total_payment_label = new Gtk::Label;
   total_payment_label->set_text("total payment");
   overpayment_.set_editable(false);
   total_payment_.set_editable(false);
@@ -53,14 +51,14 @@ CreditWindow::CreditWindow(controller::CalculatorController *controller)
   tree_view_.append_column("Monthly payment", columns_.monthly_payment_);
   tree_view_.property_expand() = true;
 
-  Gtk::ScrolledWindow *scrolled_window = new Gtk::ScrolledWindow;
+  auto *scrolled_window = new Gtk::ScrolledWindow;
   scrolled_window->set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
   scrolled_window->property_expand() = Gtk::EXPAND;
   scrolled_window->add(tree_view_);
 
 
   // Main window box
-  Gtk::Box *window_box = new Gtk::Box;
+  auto *window_box = new Gtk::Box;
   window_box->set_orientation(Gtk::ORIENTATION_HORIZONTAL);
   window_box->add(*user_box);
   window_box->add(*scrolled_window);
@@ -113,27 +111,26 @@ void CreditWindow::Evaluate() {
   const auto &term = term_.get_text();
   const auto &interest_rate = interest_rate_.get_text();
 
-  CreditInfo::credit_type type;
+  CreditInfo::CreditType type;
   if (payment_type_.get_active_row_number() == 0) {
-    type = CreditInfo::credit_type::annuity;
+    type = CreditInfo::CreditType::kAnnuity;
   } else if (payment_type_.get_active_row_number() == 1) {
-    type = CreditInfo::credit_type::differentiated;
+    type = CreditInfo::CreditType::kDifferentiated;
   }
 
   CreditInfo info = controller_->GetCreditInfo(amount, term, interest_rate, type);
 
-  if (info.out_info_.overpayment_on_credit.empty()) {
+  if (info.out_info.overpayment_on_credit.empty()) {
     total_payment_.set_text("error");
     overpayment_.set_text("error");
   } else {
-    for (const auto &item : info.out_info_.monthly_payments) {
+    for (const auto &item : info.out_info.monthly_payments) {
       PushPayment(item);
     }
 
-    total_payment_.set_text(info.out_info_.total_payment);
-    overpayment_.set_text(info.out_info_.overpayment_on_credit);
+    total_payment_.set_text(info.out_info.total_payment);
+    overpayment_.set_text(info.out_info.overpayment_on_credit);
   }
-
 }
 
-} // view
+}  // namespace s21::view

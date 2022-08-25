@@ -174,7 +174,7 @@ PlotterWindow::PlotterWindow(controller::CalculatorController *controller)
   math_expression_entry_.set_text("abs(sin(x)) + 5*2.73^-x^100*cos(x)");
 
   draw_button_.signal_clicked().connect(
-      sigc::mem_fun(*this, &PlotterWindow::Plot));
+      sigc::mem_fun(*this, &PlotterWindow::ButtonPlotHandler));
   draw_button_.set_label("plot");
 
   entry_box_.set_orientation(Gtk::ORIENTATION_HORIZONTAL);
@@ -228,6 +228,10 @@ bool PlotterWindow::PlotterKeyHandler(GdkEventKey *event) {
     return true;
   }
   return false;
+}
+
+void PlotterWindow::ButtonPlotHandler() {
+  Plot();
 }
 
 void PlotterWindow::Plot() {

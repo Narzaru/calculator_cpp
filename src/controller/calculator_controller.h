@@ -23,12 +23,12 @@ class CalculatorController {
 
   double evaluate(kstring string, kstring x);
 
-  UDFunction GetFunction(kstring expression, fprop &properties, int dots_count);
+  UDFunction GetFunction(kstring expression, fprop properties, int dots_count);
 
   CreditInfo GetCreditInfo(kstring amount_str,
                            kstring term_str,
                            kstring interest_rate_str,
-                           view::CreditInfo::credit_type type);
+                           view::CreditInfo::CreditType type);
 
  private:
   calculator::Calculator *calculator_;

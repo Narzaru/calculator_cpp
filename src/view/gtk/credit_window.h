@@ -53,6 +53,6 @@ class CreditWindow : public Gtk::Window {
   void Evaluate();
 };
 
-}  // s21::view
+}  // namespace s21::view
 
-#endif //SRC_VIEW_GTK_CREDIT_WINDOW_H_
+#endif  // SRC_VIEW_GTK_CREDIT_WINDOW_H_

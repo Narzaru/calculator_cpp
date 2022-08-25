@@ -19,7 +19,7 @@ double CalculatorController::evaluate(kstring string, kstring &x) {
   }
 
   try {
-    return calculator_->calculate(string, &num_x);
+    return calculator_->Calculate(string, &num_x);
   } catch (...) {
     return std::numeric_limits<double>::quiet_NaN();
   }
@@ -29,10 +29,10 @@ view::UDFunction CalculatorController::GetFunction(kstring &expression, fprop &p
   view::UDFunction function(dots_count, properties.x_min(), properties.x_max());
 
   try {
-    calculator_->push_expression(expression);
-    calculator_->compile_expression();
+    calculator_->PushExpression(expression);
+    calculator_->CompileExpression();
     for (int i = 0; i < dots_count; ++i) {
-      function.Y(i) = calculator_->calculate(&function.X(i));
+      function.Y(i) = calculator_->Calculate(&function.X(i));
     }
     function.SetDomain(properties.y_min(), properties.y_max());
     return function;
@@ -44,7 +44,7 @@ view::UDFunction CalculatorController::GetFunction(kstring &expression, fprop &p
 view::CreditInfo CalculatorController::GetCreditInfo(kstring amount_str,
                                                      kstring term_str,
                                                      kstring interest_rate_str,
-                                                     CreditInfo::credit_type type) {
+                                                     CreditInfo::CreditType type) {
   double amount = 0.;
   int term = 0;
   double interest_rate = 0.;
@@ -66,21 +66,21 @@ view::CreditInfo CalculatorController::GetCreditInfo(kstring amount_str,
 
   std::vector<double> payments;
 
-  if (type == view::CreditInfo::annuity) {
+  if (type == view::CreditInfo::kAnnuity) {
     payments = credit_calculator_->AnnuityPayments();
-  } else if (type == view::CreditInfo::differentiated) {
+  } else if (type == view::CreditInfo::kDifferentiated) {
     payments = credit_calculator_->DifferentiatedPayments();
   }
 
   for (const auto &item : payments) {
-    info.out_info_.monthly_payments.push_back(std::to_string(item));
+    info.out_info.monthly_payments.push_back(std::to_string(item));
   }
 
   double total = credit_calculator_->TotalPayments(payments);
   double overpayment = total - amount;
 
-  info.out_info_.total_payment = std::to_string(total);
-  info.out_info_.overpayment_on_credit = std::to_string(overpayment);
+  info.out_info.total_payment = std::to_string(total);
+  info.out_info.overpayment_on_credit = std::to_string(overpayment);
 
   return info;
 }

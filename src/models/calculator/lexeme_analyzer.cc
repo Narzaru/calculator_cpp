@@ -4,10 +4,10 @@
 
 namespace s21::math {
 
-const std::array<std::string_view, 10> LexemeAnalyzer::functions(
+const std::array<std::string_view, 10> LexemeAnalyzer::functions_(
     {"cos", "sin", "tan", "acos", "asin", "atan", "sqrt", "ln", "log", "abs"});
 
-const std::array<std::string_view, 10> LexemeAnalyzer::operators(
+const std::array<std::string_view, 10> LexemeAnalyzer::operators_(
     {"+", "-", "*", "/", "^", "mod", "%"});
 
 bool LexemeAnalyzer::IsDigit(int code) const {
@@ -87,7 +87,7 @@ bool LexemeAnalyzer::IsOpenBracket(const std::string &lexeme) const {
 }
 
 bool LexemeAnalyzer::IsFunction(const std::string &lexeme) const {
-  for (const auto &item : functions) {
+  for (const auto &item : functions_) {
     if (lexeme == item) {
       return true;
     }
@@ -96,7 +96,7 @@ bool LexemeAnalyzer::IsFunction(const std::string &lexeme) const {
 }
 
 bool LexemeAnalyzer::IsOperator(const std::string &lexeme) const {
-  for (const auto &item : operators) {
+  for (const auto &item : operators_) {
     if (lexeme == item) {
       return true;
     }
