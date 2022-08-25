@@ -28,28 +28,28 @@ bool PlotterArea::DrawCall(const Cairo::RefPtr<Cairo::Context> &cr) {
   y_start_ = -y_stretching_k_ * y_min_ + box_bot_;
 
   // background
-  draw_background(cr);
+  DrawBackground(cr);
 
   // graph
-  draw_graph(cr);
+  DrawGraph(cr);
 
   // box
-  draw_box(cr);
+  DrawBox(cr);
 
   // labels
-  draw_labels(cr);
+  DrawLabels(cr);
 
   return false;
 }
 
-void PlotterArea::draw_background(const Cairo::RefPtr<Cairo::Context> &cr) {
+void PlotterArea::DrawBackground(const Cairo::RefPtr<Cairo::Context> &cr) {
   cr->save();
   cr->set_source_rgb(1, 1, 1);
   cr->paint();
   cr->restore();
 }
 
-void PlotterArea::draw_graph(const Cairo::RefPtr<Cairo::Context> &cr) {
+void PlotterArea::DrawGraph(const Cairo::RefPtr<Cairo::Context> &cr) {
   int chunk_size = 5000;
   cr->set_source_rgb(1, 0, 0);
   cr->set_line_width(1);
@@ -77,7 +77,7 @@ void PlotterArea::draw_graph(const Cairo::RefPtr<Cairo::Context> &cr) {
   cr->stroke();
 }
 
-void PlotterArea::draw_box(const Cairo::RefPtr<Cairo::Context> &cr) {
+void PlotterArea::DrawBox(const Cairo::RefPtr<Cairo::Context> &cr) {
   cr->set_source_rgb(0, 0, 0);
   cr->set_line_width(1);
   cr->move_to(box_left_, box_top_);
@@ -98,7 +98,7 @@ void PlotterArea::draw_box(const Cairo::RefPtr<Cairo::Context> &cr) {
   }
 }
 
-void PlotterArea::draw_labels(const Cairo::RefPtr<Cairo::Context> &cr) {
+void PlotterArea::DrawLabels(const Cairo::RefPtr<Cairo::Context> &cr) {
   char str_num[32];
   Cairo::TextExtents extents;
   cr->set_source_rgb(0, 0, 0);

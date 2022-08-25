@@ -43,10 +43,10 @@ class PlotterArea : public Gtk::Layout {
   double y_start_{};
 
   bool DrawCall(const Cairo::RefPtr<Cairo::Context> &cr);
-  void draw_background(const Cairo::RefPtr<Cairo::Context> &cr);
-  void draw_graph(const Cairo::RefPtr<Cairo::Context> &cr);
-  void draw_box(const Cairo::RefPtr<Cairo::Context> &cr);
-  void draw_labels(const Cairo::RefPtr<Cairo::Context> &cr);
+  void DrawBackground(const Cairo::RefPtr<Cairo::Context> &cr);
+  void DrawGraph(const Cairo::RefPtr<Cairo::Context> &cr);
+  void DrawBox(const Cairo::RefPtr<Cairo::Context> &cr);
+  void DrawLabels(const Cairo::RefPtr<Cairo::Context> &cr);
 };
 
 class PlotterWindow : public Gtk::Window {
