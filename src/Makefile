@@ -156,7 +156,7 @@ install: calculator
 	then \
 		mkdir ../s21_calc; \
 	fi;
-	@cp calculator ../s21_calc
+	@cp calculator ../s21_calc/
 
 uninstall:
 	@if [ -d ../s21_calc ]; \
