@@ -102,9 +102,10 @@ clean:
 	@find -name "*.a" -delete
 	@find -name "*.gcno" -delete
 	@find -name "*.gcda" -delete
-	@rm -f tests calculator tests.info resources.c
+	@rm -f tests calculator tests.info resources.c src.tar.gz
 	@rm -rf gcov_report
 	@rm -rf src
+	@make -C ./Latex/ clean
 
 
 
@@ -124,6 +125,12 @@ PROJECT_FOLDERS := \
 	$(PROJECT_ROOT_FOLDER)/test \
 	$(PROJECT_ROOT_FOLDER)/view \
 	$(PROJECT_ROOT_FOLDER)/view/gtk
+
+dvi:
+	@make -C ./Latex/
+	@cp ./Latex/text.pdf .
+	@cp ./Latex/text.dvi .
+
 
 dist:
 	@for dir in $(PROJECT_FOLDERS); \
@@ -161,6 +168,6 @@ uninstall:
 run: calculator
 	./calculator
 
-.PHONY: clean dist linter install uninstall all run
+.PHONY: clean dist linter install uninstall all run dvi
 
 -include $(shell find ./build -name "*.d")
