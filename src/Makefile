@@ -102,12 +102,15 @@ clean:
 	@find -name "*.a" -delete
 	@find -name "*.gcno" -delete
 	@find -name "*.gcda" -delete
-	@rm -f tests calculator tests.info resources.c src.tar.gz
+	@rm -f tests calculator tests.info resources.c src.tar.gz *.dvi *.pdf
 	@rm -rf gcov_report
 	@rm -rf src
 	@make -C ./Latex/ clean
 
-
+dvi:
+	@make -C ./Latex/
+	@cp ./Latex/text.pdf .
+	@cp ./Latex/text.dvi .
 
 PROJECT_ROOT_FOLDER := src
 PROJECT_FOLDERS := \
@@ -124,13 +127,8 @@ PROJECT_FOLDERS := \
 	$(PROJECT_ROOT_FOLDER)/models/bank \
 	$(PROJECT_ROOT_FOLDER)/test \
 	$(PROJECT_ROOT_FOLDER)/view \
-	$(PROJECT_ROOT_FOLDER)/view/gtk
-
-dvi:
-	@make -C ./Latex/
-	@cp ./Latex/text.pdf .
-	@cp ./Latex/text.dvi .
-
+	$(PROJECT_ROOT_FOLDER)/view/gtk \
+	$(PROJECT_ROOT_FOLDER)/Latex
 
 dist:
 	@for dir in $(PROJECT_FOLDERS); \
@@ -145,6 +143,7 @@ dist:
 	@cp ./models/calculator/* ./src/models/calculator/
 	@cp ./test/* ./src/test/
 	@cp ./view/gtk/* ./src/view/gtk/
+	@cp ./Latex/* ./src/Latex/
 	@cp main.cc Makefile programm.gresource.xml ui.glade ./src/
 	@tar -zcf src.tar src
 	@gzip src.tar

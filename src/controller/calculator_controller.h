@@ -21,7 +21,7 @@ class CalculatorController {
   explicit CalculatorController(calculator::Calculator *calc, bank::CreditCalc *credit_calc);
   ~CalculatorController();
 
-  double evaluate(kstring string, kstring x);
+  double Evaluate(kstring string, kstring x);
 
   UDFunction GetFunction(kstring expression, fprop properties, int dots_count);
 

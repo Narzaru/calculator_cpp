@@ -9,7 +9,7 @@ CalculatorController::CalculatorController(calculator::Calculator *calc, bank::C
 
 CalculatorController::~CalculatorController() = default;
 
-double CalculatorController::evaluate(kstring string, kstring &x) {
+double CalculatorController::Evaluate(kstring string, kstring &x) {
   double num_x = 0.0;
 
   try {
@@ -72,6 +72,7 @@ view::CreditInfo CalculatorController::GetCreditInfo(kstring amount_str,
     payments = credit_calculator_->DifferentiatedPayments();
   }
 
+  // translate Credit class output into view type
   for (const auto &item : payments) {
     info.out_info.monthly_payments.push_back(std::to_string(item));
   }

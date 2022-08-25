@@ -26,21 +26,21 @@ class MainWindow : public Gtk::Window {
   Gtk::Entry *entry_x_;
   controller::CalculatorController *controller_;
 
-  void bind_buttons();
+  void BindButtons();
   void SwitchToPlotter();
   void SwitchToCredit();
 
-  void bind_button_to_show_plotter(const char *glade_id);
-  void bind_button_to_show_credit(const char *glade_id);
-  void bind_button_to_add_text_entry(const char *glade_id, const char *text);
-  void bind_button_to_clear_entry(const char *glade_id);
-  void bind_button_to_del_char_entry(const char *glade_id);
-  void bind_button_to_evaluate(const char *glade_id);
+  void BindButtonToShowPlotter(const char *glade_id);
+  void BindButtonToShowCredit(const char *glade_id);
+  void BindButtonToAddTextEntry(const char *glade_id, const char *text);
+  void BindButtonToClearEntry(const char *glade_id);
+  void BindButtonToDelCharEntry(const char *glade_id);
+  void BindButtonToEvaluate(const char *glade_id);
 
-  void add_text_to_entry(const char *text);
-  void clear_entry();
-  void del_char_from_entry();
-  void evaluate();
+  void AddTextToEntry(const char *text);
+  void ClearEntry();
+  void DelCharFromEntry();
+  void Evaluate();
 };
 }  // namespace s21::view
 

@@ -7,7 +7,7 @@ namespace s21::view {
 MainWindow::MainWindow(GtkWindow *c_object,
                        const Glib::RefPtr<Gtk::Builder> &builder)
     : Window(c_object), builder_(builder) {
-  bind_buttons();
+  BindButtons();
 }
 
 MainWindow::~MainWindow() = default;
@@ -25,52 +25,52 @@ MainWindow *MainWindow::GetInstance() {
   return calculator_instance;
 }
 
-void MainWindow::bind_buttons() {
+void MainWindow::BindButtons() {
   builder_->get_widget("entry", entry_);
   builder_->get_widget("entry_x", entry_x_);
 
-  bind_button_to_add_text_entry("button_1", "1");
-  bind_button_to_add_text_entry("button_2", "2");
-  bind_button_to_add_text_entry("button_3", "3");
-  bind_button_to_add_text_entry("button_4", "4");
-  bind_button_to_add_text_entry("button_5", "5");
-  bind_button_to_add_text_entry("button_6", "6");
-  bind_button_to_add_text_entry("button_7", "7");
-  bind_button_to_add_text_entry("button_8", "8");
-  bind_button_to_add_text_entry("button_9", "9");
-  bind_button_to_add_text_entry("button_0", "0");
-  bind_button_to_add_text_entry("button_mod", "mod");
-  bind_button_to_add_text_entry("button_pow", "pow");
-  bind_button_to_add_text_entry("button_/", "/");
-  bind_button_to_add_text_entry("button_*", "*");
-  bind_button_to_add_text_entry("button_-", "-");
-  bind_button_to_add_text_entry("button_+", "+");
-  bind_button_to_add_text_entry("button_.", ".");
-  bind_button_to_add_text_entry("button_e", "e");
-  bind_button_to_add_text_entry("button_(", "(");
-  bind_button_to_add_text_entry("button_)", ")");
-  bind_button_to_add_text_entry("button_sin", "sin");
-  bind_button_to_add_text_entry("button_cos", "cos");
-  bind_button_to_add_text_entry("button_tan", "tan");
-  bind_button_to_add_text_entry("button_asin", "asin");
-  bind_button_to_add_text_entry("button_acos", "acos");
-  bind_button_to_add_text_entry("button_atan", "atan");
-  bind_button_to_add_text_entry("button_sqrt", "sqrt");
-  bind_button_to_add_text_entry("button_ln", "ln");
-  bind_button_to_add_text_entry("button_log", "log");
+  BindButtonToAddTextEntry("button_1", "1");
+  BindButtonToAddTextEntry("button_2", "2");
+  BindButtonToAddTextEntry("button_3", "3");
+  BindButtonToAddTextEntry("button_4", "4");
+  BindButtonToAddTextEntry("button_5", "5");
+  BindButtonToAddTextEntry("button_6", "6");
+  BindButtonToAddTextEntry("button_7", "7");
+  BindButtonToAddTextEntry("button_8", "8");
+  BindButtonToAddTextEntry("button_9", "9");
+  BindButtonToAddTextEntry("button_0", "0");
+  BindButtonToAddTextEntry("button_mod", "mod");
+  BindButtonToAddTextEntry("button_pow", "pow");
+  BindButtonToAddTextEntry("button_/", "/");
+  BindButtonToAddTextEntry("button_*", "*");
+  BindButtonToAddTextEntry("button_-", "-");
+  BindButtonToAddTextEntry("button_+", "+");
+  BindButtonToAddTextEntry("button_.", ".");
+  BindButtonToAddTextEntry("button_e", "e");
+  BindButtonToAddTextEntry("button_(", "(");
+  BindButtonToAddTextEntry("button_)", ")");
+  BindButtonToAddTextEntry("button_sin", "sin");
+  BindButtonToAddTextEntry("button_cos", "cos");
+  BindButtonToAddTextEntry("button_tan", "tan");
+  BindButtonToAddTextEntry("button_asin", "asin");
+  BindButtonToAddTextEntry("button_acos", "acos");
+  BindButtonToAddTextEntry("button_atan", "atan");
+  BindButtonToAddTextEntry("button_sqrt", "sqrt");
+  BindButtonToAddTextEntry("button_ln", "ln");
+  BindButtonToAddTextEntry("button_log", "log");
 
-  bind_button_to_clear_entry("button_C");
+  BindButtonToClearEntry("button_C");
 
-  bind_button_to_del_char_entry("button_DEL");
+  BindButtonToDelCharEntry("button_DEL");
 
-  bind_button_to_evaluate("button_=");
+  BindButtonToEvaluate("button_=");
 
-  bind_button_to_show_plotter("button_plot");
-  bind_button_to_show_credit("button_credit");
+  BindButtonToShowPlotter("button_plot");
+  BindButtonToShowCredit("button_credit");
 
 
   entry_->signal_activate().connect(
-      sigc::mem_fun(*this, &MainWindow::evaluate));
+      sigc::mem_fun(*this, &MainWindow::Evaluate));
 }
 
 void MainWindow::SwitchToPlotter() {
@@ -83,50 +83,50 @@ void MainWindow::SwitchToCredit() {
   credit->show();
 }
 
-void MainWindow::bind_button_to_show_plotter(const char *glade_id) {
+void MainWindow::BindButtonToShowPlotter(const char *glade_id) {
   Gtk::Button *temp_button_ref;
   builder_->get_widget(glade_id, temp_button_ref);
   temp_button_ref->signal_clicked().connect(
       sigc::mem_fun(*this, &MainWindow::SwitchToPlotter));
 }
 
-void MainWindow::bind_button_to_show_credit(const char *glade_id) {
+void MainWindow::BindButtonToShowCredit(const char *glade_id) {
   Gtk::Button *temp_button_ref;
   builder_->get_widget(glade_id, temp_button_ref);
   temp_button_ref->signal_clicked().connect(
       sigc::mem_fun(*this, &MainWindow::SwitchToCredit));
 }
 
-void MainWindow::bind_button_to_add_text_entry(const char *glade_id,
-                                               const char *text) {
+void MainWindow::BindButtonToAddTextEntry(const char *glade_id,
+                                          const char *text) {
   Gtk::Button *temp_button_ref;
   builder_->get_widget(glade_id, temp_button_ref);
   temp_button_ref->signal_clicked().connect(
-      sigc::bind(sigc::mem_fun(*this, &MainWindow::add_text_to_entry), text));
+      sigc::bind(sigc::mem_fun(*this, &MainWindow::AddTextToEntry), text));
 }
 
-void MainWindow::bind_button_to_clear_entry(const char *glade_id) {
+void MainWindow::BindButtonToClearEntry(const char *glade_id) {
   Gtk::Button *temp_button_ref;
   builder_->get_widget<Gtk::Button>(glade_id, temp_button_ref);
   temp_button_ref->signal_clicked().connect(
-      sigc::mem_fun(*this, &MainWindow::clear_entry));
+      sigc::mem_fun(*this, &MainWindow::ClearEntry));
 }
 
-void MainWindow::bind_button_to_del_char_entry(const char *glade_id) {
+void MainWindow::BindButtonToDelCharEntry(const char *glade_id) {
   Gtk::Button *temp_button_ref;
   builder_->get_widget<Gtk::Button>(glade_id, temp_button_ref);
   temp_button_ref->signal_clicked().connect(
-      sigc::mem_fun(*this, &MainWindow::del_char_from_entry));
+      sigc::mem_fun(*this, &MainWindow::DelCharFromEntry));
 }
 
-void MainWindow::bind_button_to_evaluate(const char *glade_id) {
+void MainWindow::BindButtonToEvaluate(const char *glade_id) {
   Gtk::Button *temp_button_ref;
   builder_->get_widget<Gtk::Button>(glade_id, temp_button_ref);
   temp_button_ref->signal_clicked().connect(
-      sigc::mem_fun(*this, &MainWindow::evaluate));
+      sigc::mem_fun(*this, &MainWindow::Evaluate));
 }
 
-void MainWindow::add_text_to_entry(const char *text) {
+void MainWindow::AddTextToEntry(const char *text) {
   Glib::ustring string = entry_->get_text();
   string.insert(entry_->get_position(), text);
   entry_->set_text(string);
@@ -137,27 +137,27 @@ void MainWindow::add_text_to_entry(const char *text) {
   entry_->set_position(entry_->get_position() + size);
 }
 
-void MainWindow::clear_entry() {
+void MainWindow::ClearEntry() {
   entry_->delete_text(0, -1);
   entry_x_->delete_text(0, -1);
 }
 
-void MainWindow::del_char_from_entry() {
+void MainWindow::DelCharFromEntry() {
   int start_position = entry_->get_position() - 1;
   int end_position = entry_->get_position();
   entry_->delete_text(start_position, end_position);
 }
 
-void MainWindow::evaluate() {
+void MainWindow::Evaluate() {
   const Glib::ustring &expression = entry_->get_text();
   const Glib::ustring &x_str = entry_x_->get_text();
 
-  double result = controller_->evaluate(expression, x_str);
-  clear_entry();
+  double result = controller_->Evaluate(expression, x_str);
+  ClearEntry();
   std::string str_result = std::to_string(result);
   str_result.erase(str_result.find_last_not_of('0') + 1, std::string::npos);
   str_result.erase(str_result.find_last_not_of('.') + 1, std::string::npos);
-  add_text_to_entry(str_result.c_str());
+  AddTextToEntry(str_result.c_str());
 }
 
 }  // namespace s21::view

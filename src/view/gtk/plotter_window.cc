@@ -171,7 +171,7 @@ PlotterWindow::PlotterWindow(controller::CalculatorController *controller)
 
   math_expression_entry_.set_max_length(255);
   math_expression_entry_.set_placeholder_text("input math expression");
-  math_expression_entry_.set_text("abs(sin(x)) + 5*2.73^-x^100*cos(x)");
+  math_expression_entry_.set_text("tan(x)");
 
   draw_button_.signal_clicked().connect(
       sigc::mem_fun(*this, &PlotterWindow::ButtonPlotHandler));
@@ -190,13 +190,13 @@ PlotterWindow::PlotterWindow(controller::CalculatorController *controller)
   y_max_entry_.set_max_length(63);
 
   x_min_entry_.set_placeholder_text("min x value");
-  x_min_entry_.set_text("-3");
+  x_min_entry_.set_text("-5");
   x_max_entry_.set_placeholder_text("max x value");
-  x_max_entry_.set_text("3");
+  x_max_entry_.set_text("5");
   y_min_entry_.set_placeholder_text("min Y value");
-  y_min_entry_.set_text("0");
+  y_min_entry_.set_text("-3");
   y_max_entry_.set_placeholder_text("max Y value");
-  y_max_entry_.set_text("6");
+  y_max_entry_.set_text("3");
 
   window_box_.set_margin_top(5);
   window_box_.set_margin_bottom(5);
