@@ -41,7 +41,7 @@ TESTS_SRCS = $(shell find ./test -name "*.cc")
 TESTS_OBJS = $(addprefix $(TESTS_BUILD_DIR)/,$(notdir $(TESTS_SRCS:%.cc=%.o)))
 
 $(TESTS_BUILD_DIR)/%.o: test/%.cc
-	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCLUDE_PATHS)
+	$(CXX) -O3 $(CXXFLAGS) -c $< -o $@ $(INCLUDE_PATHS)
 
 CALC_COV_BUILD_DIR = build/test
 CALC_COV_SRCS = $(shell find ./models/calculator -name "*.cc")
@@ -139,8 +139,28 @@ dist:
 	@cp ./test/* ./src/test/
 	@cp ./view/gtk/* ./src/view/gtk/
 	@cp main.cc Makefile programm.gresource.xml ui.glade ./src/
+	@tar -zcf src.tar src
+	@gzip src.tar
+	@rm -rf src
 
+all: calculator
 
-.PHONY: clean dist linter
+install: calculator
+	@if [ ! -d ../s21_calc ]; \
+	then \
+		mkdir ../s21_calc; \
+	fi;
+	@cp calculator ../s21_calc
+
+uninstall:
+	@if [ -d ../s21_calc ]; \
+	then \
+		rm -rf ../s21_calc; \
+	fi;
+
+run: calculator
+	./calculator
+
+.PHONY: clean dist linter install uninstall all run
 
 -include $(shell find ./build -name "*.d")
