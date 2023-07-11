@@ -1,15 +1,6 @@
 CXX := g++
 CXXFLAGS := -MD
 
-ifeq (true, true)
-	CXXFLAGS += -Wall -Wextra
-	ifeq ($(shell uname), Linux)
-		CXXFLAGS += -g# -fsanitize=address
-	else ifeq ($(shell uname), Darwin)
-		CXXFLAGS += -g
-	endif
-endif
-
 FOLDERS = . ./constroller ./models/calculator ./test ./view/gtk
 INCLUDE_PATHS = $(addprefix -I,$(FOLDERS))
 
@@ -19,7 +10,7 @@ CALC_SRCS = $(shell find ./models/calculator -name "*.cc")
 CALC_OBJS = $(addprefix $(CALC_BUILD_DIR)/,$(notdir $(CALC_SRCS:%.cc=%.o)))
 
 $(CALC_BUILD_DIR)/%.o: models/calculator/%.cc
-	$(CXX) -O3 $(CXXFLAGS) -c $< -o $@ $(INCLUDE_PATHS)
+	$(CXX) -O2 $(CXXFLAGS) -c $< -o $@ $(INCLUDE_PATHS)
 
 $(CALC_BUILD_DIR)/libcalculator.a: $(CALC_OBJS)
 	ar rcs $@ $^
@@ -30,7 +21,7 @@ BANK_SRCS = $(shell find ./models/bank -name "*.cc")
 BANK_OBJS = $(addprefix $(BANK_BUILD_DIR)/,$(notdir $(BANK_SRCS:%.cc=%.o)))
 
 $(BANK_BUILD_DIR)/%.o: models/bank/%.cc
-	$(CXX) -O3 $(CXXFLAGS) -c $< -o $@ $(INCLUDE_PATHS)
+	$(CXX) -O2 $(CXXFLAGS) -c $< -o $@ $(INCLUDE_PATHS)
 
 $(BANK_BUILD_DIR)/libbank.a: $(BANK_OBJS)
 	ar rcs $@ $^
@@ -41,17 +32,17 @@ TESTS_SRCS = $(shell find ./test -name "*.cc")
 TESTS_OBJS = $(addprefix $(TESTS_BUILD_DIR)/,$(notdir $(TESTS_SRCS:%.cc=%.o)))
 
 $(TESTS_BUILD_DIR)/%.o: test/%.cc
-	$(CXX) -O3 $(CXXFLAGS) -c $< -o $@ $(INCLUDE_PATHS)
+	$(CXX) -O2 $(CXXFLAGS) -c $< -o $@ $(INCLUDE_PATHS)
 
 CALC_COV_BUILD_DIR = build/test
 CALC_COV_SRCS = $(shell find ./models/calculator -name "*.cc")
 CALC_COV_OBJS = $(addprefix $(CALC_COV_BUILD_DIR)/,$(notdir $(CALC_COV_SRCS:%.cc=%.o)))
 
 $(CALC_COV_BUILD_DIR)/%.o: models/calculator/%.cc
-	$(CXX) -O3 $(CXXFLAGS) --coverage -c $< -o $@ $(INCLUDE_PATHS)
+	$(CXX) -O2 $(CXXFLAGS) --coverage -c $< -o $@ $(INCLUDE_PATHS)
 
 tests: $(TESTS_OBJS) $(CALC_COV_OBJS)
-	$(CXX) $(CXXFLAGS) $^ -o $@ -lgtest -lgcov $(INCLUDE_PATHS)
+	$(CXX) -O2 $(CXXFLAGS) $^ -o $@ -lgtest -lgcov $(INCLUDE_PATHS)
 
 # Views
 VIEW_BUILD_DIR = build/view
@@ -59,7 +50,7 @@ VIEW_SRCS = $(shell find ./view/gtk -name "*.cc")
 VIEW_OBJS = $(addprefix $(VIEW_BUILD_DIR)/,$(notdir $(VIEW_SRCS:%.cc=%.o)))
 
 $(VIEW_BUILD_DIR)/%.o: view/gtk/%.cc
-	$(CXX) $(CXXFLAGS) -c $< -o $@ `pkg-config gtkmm-3.0 --libs --cflags` $(INCLUDE_PATHS)
+	$(CXX) -O2 $(CXXFLAGS) -c $< -o $@ `pkg-config gtkmm-3.0 --libs --cflags` $(INCLUDE_PATHS)
 
 # Controllers
 CNTRL_BUILD_DIR = build/controller
@@ -67,11 +58,11 @@ CNTRL_SRCS = $(shell find ./controller -name "*.cc")
 CNTRL_OBJS = $(addprefix $(CNTRL_BUILD_DIR)/,$(notdir $(CNTRL_SRCS:%.cc=%.o)))
 
 $(CNTRL_BUILD_DIR)/%.o: controller/%.cc
-	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCLUDE_PATHS)
+	$(CXX) -O2 $(CXXFLAGS) -c $< -o $@ $(INCLUDE_PATHS)
 
 # Calculator
 build/main.o: main.cc
-	$(CXX) $(CXXFLAGS) -c $< -o $@ `pkg-config gtkmm-3.0 --libs --cflags` $(INCLUDE_PATHS)
+	$(CXX) -O2 $(CXXFLAGS) -c $< -o $@ `pkg-config gtkmm-3.0 --libs --cflags` $(INCLUDE_PATHS)
 
 programm.gresource.xml: ui.glade
 
@@ -79,7 +70,7 @@ resources.c: programm.gresource.xml
 	glib-compile-resources --target=resources.c --generate-source $^
 
 calculator: build/main.o resources.c $(VIEW_OBJS) $(CNTRL_OBJS) $(CALC_BUILD_DIR)/libcalculator.a $(BANK_BUILD_DIR)/libbank.a
-	$(CXX) $(CXXFLAGS) $^ -o $@ `pkg-config gtkmm-3.0 --libs --cflags` $(INCLUDE_PATHS)
+	$(CXX) -O2 $(CXXFLAGS) $^ -o $@ `pkg-config gtkmm-3.0 --libs --cflags` $(INCLUDE_PATHS)
 
 # Gcov report
 gcov_report: tests
